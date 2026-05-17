@@ -25,9 +25,11 @@ body {
     min-height: 100vh;
     align-items: center;
 
-    background-image: url("background.svg");
+    background-image: url("background.png");
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
 }
 
 h1 {
