@@ -1,5 +1,7 @@
 import React from 'react';
 import { Item } from '../types';
+import './shared.css';
+import './ItemsList.css';
 
 const agruparPorCategoria = (items: Item[]): Record<string, Item[]> => {
   return items.reduce((acc, item) => {

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Jugador } from '../types';
+import './shared.css';
+import './JugadoresList.css';
 
 export const JugadoresList: React.FC<{ jugadores: Jugador[] }> = ({ jugadores }) => (
   <div className="list-container jugadores-list">
@@ -15,4 +17,3 @@ export const JugadoresList: React.FC<{ jugadores: Jugador[] }> = ({ jugadores })
 );
 
 export default JugadoresList;
-
