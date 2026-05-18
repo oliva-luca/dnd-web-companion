@@ -1,18 +1,22 @@
 .items-list {
     flex: 1;
-    max-width: 500px;
+    max-width: 600px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 24px;
+    border-radius: 10px;
     background-color: rgba(255, 247, 217, 1);
+    display: flex;
+    flex-direction: column;
 }
 
 .item {
     padding: 10px;
     background-color: rgba(25, 25, 28, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    border-radius: 2px;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .item:hover {
@@ -23,21 +27,41 @@
 .item-name {
     font-weight: 500;
     font-size: 16px;
-    margin-bottom: 8px;
     color: #000000;
-}
-
-.item-details {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: #333333;
+    text-align: left;
+    flex: 0 0 45%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .items-por-categoria {
     display: flex;
     flex-direction: column;
     gap: 24px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+}
+
+.items-por-categoria::-webkit-scrollbar {
+    width: 8px;
+}
+
+.items-por-categoria::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.items-por-categoria::-webkit-scrollbar-thumb {
+    background: rgba(76, 166, 255, 0.5);
+    border-radius: 10px;
+}
+
+.items-por-categoria::-webkit-scrollbar-thumb:hover {
+    background: rgba(76, 166, 255, 0.8);
 }
 
 .categoria-grupo {
@@ -70,5 +94,21 @@
 
 .peso, .valor, .cantidad {
     font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: #333333;
 }
 
+.cantidad {
+    flex: 0 0 15%;
+    text-align: center;
+}
+
+.peso {
+    flex: 0 0 20%;
+    text-align: center;
+}
+
+.valor {
+    flex: 0 0 20%;
+    text-align: center;
+}

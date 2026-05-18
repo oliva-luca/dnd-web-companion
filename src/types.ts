@@ -10,5 +10,6 @@ export interface Item {
 export interface Jugador {
   id: number;
   nombre: string;
+  inventario: Item[];
 }
 

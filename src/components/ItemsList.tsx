@@ -11,13 +11,19 @@ const agruparPorCategoria = (items: Item[]): Record<string, Item[]> => {
   }, {} as Record<string, Item[]>);
 };
 
-export const ItemsList: React.FC<{ items: Item[] }> = ({ items }) => {
+const pesoTotal = (items: Item[]): number => {
+  return items.reduce((total, item) => total + item.peso * item.cantidad, 0);
+};
+
+export const ItemsList: React.FC<{ items: Item[], jugador: string }> = ({ items, jugador }) => {
   const itemsPorCategoria = agruparPorCategoria(items);
   const categorias = Object.keys(itemsPorCategoria).sort();
+  const pesoInventario = pesoTotal(items);
 
   return (
     <div className="list-container items-list">
-      <h2>Objetos</h2>
+      <h2>{jugador} ({pesoInventario}kg)</h2>
+      <hr className="solid" />
       <div className="items-por-categoria">
         {categorias.map((categoria) => (
           <div key={categoria} className="categoria-grupo">
@@ -25,12 +31,10 @@ export const ItemsList: React.FC<{ items: Item[] }> = ({ items }) => {
             <ul>
               {itemsPorCategoria[categoria].map((item) => (
                 <li key={item.id} className="item">
-                  <div className="item-name">{item.nombre}</div>
-                  <div className="item-details">
-                    <span className="cantidad">x{item.cantidad}</span>
-                    <span className="peso">Peso: {item.peso} kg</span>
-                    <span className="valor">Valor: ${item.valor}</span>
-                  </div>
+                  <span className="item-name">{item.nombre}</span>
+                  <span className="cantidad">x{item.cantidad}</span>
+                  <span className="peso">{item.peso}kg</span>
+                  <span className="valor">${item.valor}</span>
                 </li>
               ))}
             </ul>
@@ -42,4 +46,3 @@ export const ItemsList: React.FC<{ items: Item[] }> = ({ items }) => {
 };
 
 export default ItemsList;
-

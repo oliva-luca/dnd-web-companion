@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import ItemsList from './components/ItemsList';
 import JugadoresList from './components/JugadoresList';
-import { itemsMock, jugadoresMock } from './data';
+import { jugadoresMock } from './data';
 
-const App: React.FC = () => (
-  <div className="app-container">
-    <header className="app-header">
-      <h1>Gestor de Inventario</h1>
-    </header>
-    <main className="app-main">
-      <ItemsList items={itemsMock} />
-      <JugadoresList jugadores={jugadoresMock} />
-    </main>
-  </div>
-);
+const App: React.FC = () => {
+  const [selectedJugadorId, setSelectedJugadorId] = useState<number | null>(
+    jugadoresMock.length > 0 ? jugadoresMock[0].id : null
+  );
+
+  const jugadorSeleccionado = jugadoresMock.find((j) => j.id === selectedJugadorId) || null;
+
+  return (
+    <div className="app-container">
+      <main className="app-main">
+        <ItemsList items={jugadorSeleccionado ? jugadorSeleccionado.inventario : []} jugador={jugadorSeleccionado ? jugadorSeleccionado.nombre : 'Seleccionar jugador'} />
+        <JugadoresList
+          jugadores={jugadoresMock}
+          selectedId={selectedJugadorId}
+          onSelect={(id) => setSelectedJugadorId(id)}
+        />
+      </main>
+    </div>
+  );
+};
 
 // Renderizar la aplicación
 const root = ReactDOM.createRoot(document.getElementById('root')!);

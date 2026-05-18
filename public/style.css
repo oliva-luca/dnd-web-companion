@@ -22,14 +22,10 @@ body {
     flex-direction: column;
     justify-content: space-between;
     min-width: 320px;
-    min-height: 100vh;
+    overflow: hidden;
+    height: 100%;
     align-items: center;
-
-    background-image: url("background.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
+    background-color: #1A1917;
 }
 
 h1 {
