@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
@@ -16,6 +16,9 @@ const pesoTotal = (items: Item[]): number => {
 };
 
 export const ItemsList: React.FC<{ items: Item[], jugador: string }> = ({ items, jugador }) => {
+  useEffect(() => {
+    console.debug('ItemsList props - items count:', items.length, 'jugador:', jugador)
+  }, [items, jugador])
   const itemsPorCategoria = agruparPorCategoria(items);
   const categorias = Object.keys(itemsPorCategoria).sort();
   const pesoInventario = pesoTotal(items);

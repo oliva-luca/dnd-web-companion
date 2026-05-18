@@ -1,22 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import ItemsList from './components/ItemsList';
 import JugadoresList from './components/JugadoresList';
-import { jugadoresMock } from './data';
+import { useCharacters } from './hooks/useCharacters';
 
 const App: React.FC = () => {
-  const [selectedJugadorId, setSelectedJugadorId] = useState<number | null>(
-    jugadoresMock.length > 0 ? jugadoresMock[0].id : null
-  );
+  const [selectedJugadorId, setSelectedJugadorId] = useState<number | null>(null);
+  const uc = useCharacters(1);
+  const { characters, loading, error, reload } = uc;
 
-  const jugadorSeleccionado = jugadoresMock.find((j) => j.id === selectedJugadorId) || null;
+  // select first character on load
+  useEffect(() => {
+    if (!selectedJugadorId && characters.length > 0) {
+      setSelectedJugadorId(characters[0].id);
+    }
+  }, [characters, selectedJugadorId]);
+
+  const jugadorSeleccionado = characters.find((j) => j.id === selectedJugadorId) || null;
 
   return (
     <div className="app-container">
       <main className="app-main">
-        <ItemsList items={jugadorSeleccionado ? jugadorSeleccionado.inventario : []} jugador={jugadorSeleccionado ? jugadorSeleccionado.nombre : 'Seleccionar jugador'} />
+        {/* DEBUG: show number of characters loaded */}
+        <div style={{ position: 'absolute', top: 8, left: 8, color: '#fff' }}>
+          Cargados: {characters.length}
+        </div>
+        {loading ? (
+          <div className="list-container">
+            <h2>Cargando...</h2>
+          </div>
+        ) : (
+          <ItemsList items={jugadorSeleccionado ? jugadorSeleccionado.inventario : []} jugador={jugadorSeleccionado ? jugadorSeleccionado.nombre : 'Seleccionar jugador'} />
+        )}
+
+        <div className="controls">
+          <button onClick={() => reload()} disabled={loading}>
+            Refrescar
+          </button>
+          {error && (
+            <div className="error">Error al cargar datos: {String(error?.message || error)}</div>
+          )}
+        </div>
+
         <JugadoresList
-          jugadores={jugadoresMock}
+          jugadores={characters}
           selectedId={selectedJugadorId}
           onSelect={(id) => setSelectedJugadorId(id)}
         />
