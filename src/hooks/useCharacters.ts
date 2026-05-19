@@ -37,6 +37,7 @@ export function useCharacters(campaignId = 1) {
           peso: ci.items?.weight ?? 0,
           valor: ci.items?.value ?? 0,
           categoria: ci.items?.category ?? 'Misc',
+          is_equipped: ci.is_equipped ?? false,
         }))
 
         return {

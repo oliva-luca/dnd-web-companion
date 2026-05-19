@@ -24,6 +24,17 @@
     border-color: rgba(76, 166, 255, 0.3);
 }
 
+/*.item.equipped {*/
+/*    border: 2px solid rgba(76, 166, 255, 0.9);*/
+/*    border-radius: 4px;*/
+/*    background-color: rgba(76, 166, 255, 0.05);*/
+/*}*/
+
+.item.equipped .item-name {
+    color: rgba(76, 166, 255, 0.95);
+    font-weight: 600;
+}
+
 .item-name {
     font-weight: 500;
     font-size: 16px;

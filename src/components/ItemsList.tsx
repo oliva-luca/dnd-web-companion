@@ -33,7 +33,7 @@ export const ItemsList: React.FC<{ items: Item[], jugador: string }> = ({ items,
             <h3 className="categoria-titulo">{categoria}</h3>
             <ul>
               {itemsPorCategoria[categoria].map((item) => (
-                <li key={item.id} className="item">
+                <li key={item.id} className={`item${item.is_equipped ? ' equipped' : ''}`}>
                   <span className="item-name">{item.nombre}</span>
                   <span className="cantidad">x{item.cantidad}</span>
                   <span className="peso">{item.peso}kg</span>

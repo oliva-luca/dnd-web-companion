@@ -5,6 +5,7 @@ export interface Item {
   peso: number;
   valor: number;
   categoria: string;
+  is_equipped?: boolean;
 }
 
 export interface Jugador {

@@ -21,10 +21,6 @@ const App: React.FC = () => {
   return (
     <div className="app-container">
       <main className="app-main">
-        {/* DEBUG: show number of characters loaded */}
-        <div style={{ position: 'absolute', top: 8, left: 8, color: '#fff' }}>
-          Cargados: {characters.length}
-        </div>
         {loading ? (
           <div className="list-container">
             <h2>Cargando...</h2>
