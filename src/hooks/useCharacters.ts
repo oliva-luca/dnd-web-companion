@@ -14,7 +14,7 @@ export function useCharacters(campaignId = 1) {
     const { data, error } = await supabase
       .from('characters')
       .select(
-        `id, name, class, level, character_items(id, count, is_equipped, notes, items(id, name, weight, value, category))`
+        `id, name, class, level, character_items(id, count, is_equipped, public, notes, items(id, name, weight, value, category))`
       )
       .eq('campaign_id', campaignId)
 
@@ -38,6 +38,7 @@ export function useCharacters(campaignId = 1) {
           valor: ci.items?.value ?? 0,
           categoria: ci.items?.category ?? 'Misc',
           is_equipped: ci.is_equipped ?? false,
+          public: ci.public ?? true,
           character_item_id: ci.id,
         }))
 
@@ -92,6 +93,31 @@ export function useCharacters(campaignId = 1) {
     }
   }, [fetchData])
 
-  return { characters, loading, error, reload: fetchData, toggleItemEquipped }
+  const toggleItemPublic = useCallback(async (characterItemId: number, currentPublic: boolean) => {
+    const newPublic = !currentPublic
+
+    // Update in Supabase
+    try {
+      const { error } = await supabase
+        .from('character_items')
+        .update({ public: newPublic })
+        .eq('id', characterItemId)
+
+      if (error) {
+        console.error('Error updating public status:', error)
+        // Revert by reloading
+        fetchData()
+        return
+      }
+
+      // Re-fetch to ensure consistency
+      fetchData()
+    } catch (e) {
+      console.error('Error toggling public:', e)
+      fetchData()
+    }
+  }, [fetchData])
+
+  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic }
 }
 

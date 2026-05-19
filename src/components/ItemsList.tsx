@@ -24,11 +24,12 @@ type ItemsListProps = {
   items: Item[];
   jugador: string;
   onToggleEquipped?: (characterItemId: number, currentEquipped: boolean) => void;
+  onTogglePublic?: (characterItemId: number, currentPublic: boolean) => void;
   openMenuId: number | null;
   setOpenMenuId: (id: number | null) => void;
 };
 
-export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEquipped, openMenuId, setOpenMenuId }) => {
+export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEquipped, onTogglePublic, openMenuId, setOpenMenuId }) => {
   useEffect(() => {
     console.debug('ItemsList props - items count:', items.length, 'jugador:', jugador)
   }, [items, jugador])
@@ -98,8 +99,20 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
                           >
                             {item.is_equipped ? 'Desequipar' : 'Equipar'}
                           </button>
-                          <button className="simple-button">Usar</button>
-                          <button className="simple-button">Visible</button>
+                          <button className="simple-button"></button>
+                          <button
+                            className="simple-button"
+                            onClick={() => {
+                              if (item.character_item_id && onTogglePublic) {
+                                onTogglePublic(
+                                  item.character_item_id,
+                                  item.public ?? true,
+                                );
+                              }
+                            }}
+                          >
+                            {item.public ? '👁️' : '🔒'}
+                          </button>
                         </div>
                       </div>
                     )}

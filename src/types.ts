@@ -6,6 +6,7 @@ export interface Item {
   valor: number;
   categoria: string;
   is_equipped?: boolean;
+  public?: boolean;
   character_item_id?: number;
 }
 

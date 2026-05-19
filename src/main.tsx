@@ -8,7 +8,7 @@ const App: React.FC = () => {
   const [selectedJugadorId, setSelectedJugadorId] = useState<number | null>(null);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const uc = useCharacters(1);
-  const { characters, loading, error, reload, toggleItemEquipped } = uc;
+  const { characters, loading, error, reload, toggleItemEquipped, toggleItemPublic } = uc;
 
   // select first character on load
   useEffect(() => {
@@ -32,6 +32,7 @@ const App: React.FC = () => {
             items={jugadorSeleccionado ? jugadorSeleccionado.inventario : []}
             jugador={jugadorSeleccionado ? jugadorSeleccionado.nombre : 'Seleccionar jugador'}
             onToggleEquipped={toggleItemEquipped}
+            onTogglePublic={toggleItemPublic}
             openMenuId={openMenuId}
             setOpenMenuId={setOpenMenuId}
           />
