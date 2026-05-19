@@ -38,6 +38,7 @@ export function useCharacters(campaignId = 1) {
           valor: ci.items?.value ?? 0,
           categoria: ci.items?.category ?? 'Misc',
           is_equipped: ci.is_equipped ?? false,
+          character_item_id: ci.id,
         }))
 
         return {
@@ -66,6 +67,31 @@ export function useCharacters(campaignId = 1) {
     }
   }, [fetchData])
 
-  return { characters, loading, error, reload: fetchData }
+  const toggleItemEquipped = useCallback(async (characterItemId: number, currentEquipped: boolean) => {
+    const newEquipped = !currentEquipped
+
+    // Update in Supabase
+    try {
+      const { error } = await supabase
+        .from('character_items')
+        .update({ is_equipped: newEquipped })
+        .eq('id', characterItemId)
+
+      if (error) {
+        console.error('Error updating equipped status:', error)
+        // Revert by reloading
+        fetchData()
+        return
+      }
+
+      // Re-fetch to ensure consistency
+      fetchData()
+    } catch (e) {
+      console.error('Error toggling equipped:', e)
+      fetchData()
+    }
+  }, [fetchData])
+
+  return { characters, loading, error, reload: fetchData, toggleItemEquipped }
 }
 

@@ -6,6 +6,7 @@ export interface Item {
   valor: number;
   categoria: string;
   is_equipped?: boolean;
+  character_item_id?: number;
 }
 
 export interface Jugador {
