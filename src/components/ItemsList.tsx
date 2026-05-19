@@ -3,8 +3,12 @@ import { Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
 
-const agruparPorCategoria = (items: Item[]): Record<string, Item[]> => {
-  return items.reduce((acc, item) => {
+const agruparPorCategoriaYOrdenar = (items: Item[]): Record<string, Item[]> => {
+  // 1. Primero creamos una copia ordenada alfabéticamente de todos los ítems
+  const itemsOrdenados = [...items].sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+  // 2. Luego hacemos el reduce sobre la lista ya ordenada
+  return itemsOrdenados.reduce((acc, item) => {
     if (!acc[item.categoria]) acc[item.categoria] = [];
     acc[item.categoria].push(item);
     return acc;
@@ -25,7 +29,7 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
   useEffect(() => {
     console.debug('ItemsList props - items count:', items.length, 'jugador:', jugador)
   }, [items, jugador])
-  const itemsPorCategoria = agruparPorCategoria(items);
+  const itemsPorCategoria = agruparPorCategoriaYOrdenar(items);
   const categorias = Object.keys(itemsPorCategoria).sort();
   const pesoInventario = pesoTotal(items);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
