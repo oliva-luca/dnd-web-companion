@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
@@ -24,16 +24,17 @@ type ItemsListProps = {
   items: Item[];
   jugador: string;
   onToggleEquipped?: (characterItemId: number, currentEquipped: boolean) => void;
+  openMenuId: number | null;
+  setOpenMenuId: (id: number | null) => void;
 };
 
-export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEquipped }) => {
+export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEquipped, openMenuId, setOpenMenuId }) => {
   useEffect(() => {
     console.debug('ItemsList props - items count:', items.length, 'jugador:', jugador)
   }, [items, jugador])
   const itemsPorCategoria = agruparPorCategoriaYOrdenar(items);
   const categorias = Object.keys(itemsPorCategoria).sort();
   const pesoInventario = pesoTotal(items);
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   return (
     <div className="list-container items-list">
@@ -92,7 +93,6 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
                                   item.character_item_id,
                                   item.is_equipped ?? false,
                                 );
-                                setOpenMenuId(null);
                               }
                             }}
                           >
