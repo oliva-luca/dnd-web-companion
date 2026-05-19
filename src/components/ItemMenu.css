@@ -1,0 +1,30 @@
+.item-menu {
+    width: 100%;
+    margin-top: 8px;
+    /*background: rgba(255,255,255,0.7);*/
+    border-radius: 6px;
+    /*border: 1px solid rgba(0,0,0,0.06);*/
+    display: flex;
+    justify-content: space-between; /* 👈 Esto hace la magia */
+    align-items: center; /* Centra los botones verticalmente */
+    width: 100%;
+    gap: 8px;
+}
+
+.equip-button {
+    background: rgba(76,166,255,0.12);
+    border: 1px solid rgba(76,166,255,0.5);
+    color: rgba(0,0,0,0.95);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.simple-button {
+    background: rgba(76,166,255,0.12);
+    border: 1px solid rgba(76,166,255,0.5);
+    color: rgba(0,0,0,0.95);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
+import './ItemMenu.css';
 
 const agruparPorCategoriaYOrdenar = (items: Item[]): Record<string, Item[]> => {
   // 1. Primero creamos una copia ordenada alfabéticamente de todos los ítems
@@ -47,7 +48,10 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
                 const idKey = item.character_item_id || item.id;
                 const menuOpen = openMenuId === idKey;
                 return (
-                  <li key={idKey} className={`item${item.is_equipped ? ' equipped' : ''}`}>
+                  <li
+                    key={idKey}
+                    className={`item${item.is_equipped ? ' equipped' : ''}`}
+                  >
                     <div className="item-main">
                       <span className="item-name">{item.nombre}</span>
                       <span className="cantidad">x{item.cantidad}</span>
@@ -68,21 +72,39 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
 
                     {menuOpen && (
                       <div className="item-menu" id={`menu-${idKey}`}>
-                        <button
-                          className="equip-action"
-                          onClick={async () => {
-                            if (item.character_item_id && onToggleEquipped) {
-                              await onToggleEquipped(item.character_item_id, item.is_equipped ?? false);
-                              setOpenMenuId(null);
-                            }
-                          }}
-                        >
-                          {item.is_equipped ? 'Unequip' : 'Equip'}
-                        </button>
+                        <div>
+                          <button className="simple-button">Detalles</button>
+                          <button className="simple-button">Notas</button>
+                        </div>
+
+                        <div>
+                          <button
+                            className="simple-button"
+                            style={{ justifyContent: 'flex-end' }}
+                          >
+                            Borrar
+                          </button>
+                          <button
+                            className="equip-button"
+                            onClick={async () => {
+                              if (item.character_item_id && onToggleEquipped) {
+                                onToggleEquipped(
+                                  item.character_item_id,
+                                  item.is_equipped ?? false,
+                                );
+                                setOpenMenuId(null);
+                              }
+                            }}
+                          >
+                            {item.is_equipped ? 'Desequipar' : 'Equipar'}
+                          </button>
+                          <button className="simple-button">Usar</button>
+                          <button className="simple-button">Visible</button>
+                        </div>
                       </div>
                     )}
                   </li>
-                )
+                );
               })}
             </ul>
           </div>
