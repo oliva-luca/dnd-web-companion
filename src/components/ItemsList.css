@@ -15,25 +15,59 @@
     border-radius: 2px;
     transition: all 0.3s ease;
     display: flex;
-    align-items: center;
-    gap: 6px;
+    flex-direction: column;
+    gap: 8px;
     position: relative;
 }
 
 .item:hover {
-    background-color: rgba(25, 25, 28, 0.3);
-    border-color: rgba(76, 166, 255, 0.3);
+    background-color: rgba(25, 25, 28, 0.15);
+    border-color: rgba(76, 166, 255, 0.5);
 }
-
-/*.item.equipped {*/
-/*    border: 2px solid rgba(76, 166, 255, 0.9);*/
-/*    border-radius: 4px;*/
-/*    background-color: rgba(76, 166, 255, 0.05);*/
-/*}*/
 
 .item.equipped .item-name {
     color: rgba(76, 166, 255, 0.95);
     font-weight: 600;
+}
+
+.item-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.menu-button {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: rgba(76,166,255,0.9);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.item-menu {
+    width: 100%;
+    margin-top: 8px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    gap: 8px;
+}
+
+.equip-action {
+    background: rgba(76,166,255,0.12);
+    border: 1px solid rgba(76,166,255,0.5);
+    color: rgba(76,166,255,0.95);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .item-name {

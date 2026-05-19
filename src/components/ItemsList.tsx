@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
@@ -28,6 +28,7 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
   const itemsPorCategoria = agruparPorCategoria(items);
   const categorias = Object.keys(itemsPorCategoria).sort();
   const pesoInventario = pesoTotal(items);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
   return (
     <div className="list-container items-list">
@@ -38,23 +39,47 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
           <div key={categoria} className="categoria-grupo">
             <h3 className="categoria-titulo">{categoria}</h3>
             <ul>
-              {itemsPorCategoria[categoria].map((item) => (
-                <li key={item.character_item_id || item.id} className={`item${item.is_equipped ? ' equipped' : ''}`}>
-                  <span className="item-name">{item.nombre}</span>
-                  <span className="cantidad">x{item.cantidad}</span>
-                  <span className="peso">{item.peso}kg</span>
-                  <span className="valor">${item.valor}</span>
-                  {item.character_item_id && onToggleEquipped && (
-                    <button
-                      className="equip-button"
-                      onClick={() => onToggleEquipped(item.character_item_id!, item.is_equipped ?? false)}
-                      title={item.is_equipped ? 'Desmontar' : 'Equipar'}
-                    >
-                      {item.is_equipped ? '✓' : '◯'}
-                    </button>
-                  )}
-                </li>
-              ))}
+              {itemsPorCategoria[categoria].map((item) => {
+                const idKey = item.character_item_id || item.id;
+                const menuOpen = openMenuId === idKey;
+                return (
+                  <li key={idKey} className={`item${item.is_equipped ? ' equipped' : ''}`}>
+                    <div className="item-main">
+                      <span className="item-name">{item.nombre}</span>
+                      <span className="cantidad">x{item.cantidad}</span>
+                      <span className="peso">{item.peso}kg</span>
+                      <span className="valor">${item.valor}</span>
+                      {item.character_item_id && onToggleEquipped && (
+                        <button
+                          className="menu-button"
+                          onClick={() => setOpenMenuId(menuOpen ? null : idKey)}
+                          aria-expanded={menuOpen}
+                          aria-controls={`menu-${idKey}`}
+                          title={menuOpen ? 'Close' : 'Options'}
+                        >
+                          ⋮
+                        </button>
+                      )}
+                    </div>
+
+                    {menuOpen && (
+                      <div className="item-menu" id={`menu-${idKey}`}>
+                        <button
+                          className="equip-action"
+                          onClick={async () => {
+                            if (item.character_item_id && onToggleEquipped) {
+                              await onToggleEquipped(item.character_item_id, item.is_equipped ?? false);
+                              setOpenMenuId(null);
+                            }
+                          }}
+                        >
+                          {item.is_equipped ? 'Unequip' : 'Equip'}
+                        </button>
+                      </div>
+                    )}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         ))}
