@@ -21,7 +21,8 @@ const App: React.FC = () => {
   return (
     <div className="app-container">
       <main className="app-main">
-        {loading ? (
+        {/* If loading and no characters yet, show full loading. Otherwise keep showing current data and show small loader */}
+        {loading && characters.length === 0 ? (
           <div className="list-container">
             <h2>Cargando...</h2>
           </div>
@@ -31,6 +32,10 @@ const App: React.FC = () => {
             jugador={jugadorSeleccionado ? jugadorSeleccionado.nombre : 'Seleccionar jugador'}
             onToggleEquipped={toggleItemEquipped}
           />
+        )}
+
+        {loading && characters.length > 0 && (
+          <div className="loading-indicator">Cargando...</div>
         )}
 
         <div className="controls">
