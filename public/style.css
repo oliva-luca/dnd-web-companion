@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Nerd Font";
+    src: url("fonts/SymbolsNerdFont-Regular.woff2") format("woff2");
+}
+
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-weight: 300;
@@ -83,7 +88,7 @@ img {
 
 i.nf {
     font-size: 14px;
-    font-family: "Nerd Font Symbols", "Symbols Nerd Font", "JetBrainsMono Nerd Font", "JetBrainsMono NF", monospace; /* Try multiple fallback names */
+    font-family: "Nerd Font", "Symbols Nerd Font", "JetBrainsMono Nerd Font", "JetBrainsMono NF", monospace; /* Try multiple fallback names */
     font-style: normal;
     font-variant: normal;
     text-transform: none;
