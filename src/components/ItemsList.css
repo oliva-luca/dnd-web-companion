@@ -102,10 +102,10 @@
 
 .categoria-titulo {
     margin: 0 0 12px 0;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
     text-transform: uppercase;
-    color: rgba(76, 166, 255, 0.8);
+    color: #b59014;
     letter-spacing: 0.5px;
 }
 

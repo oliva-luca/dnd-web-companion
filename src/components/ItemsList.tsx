@@ -20,6 +20,15 @@ const pesoTotal = (items: Item[]): number => {
   return items.reduce((total, item) => total + item.peso * item.cantidad, 0);
 };
 
+const categoriaIconos: Record<string, string> = {
+  Armas: '󰓥',
+  Armaduras: '',
+  Consumibles: '',
+  Herramientas: '󱁤',
+  Artefactos: '󰬯',
+  Misc: '',
+};
+
 type ItemsListProps = {
   items: Item[];
   jugador: string;
@@ -39,12 +48,17 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
 
   return (
     <div className="list-container items-list">
-      <h2>{jugador} ({pesoInventario}kg)</h2>
+      <h2>
+        {jugador} ({pesoInventario}kg)
+      </h2>
       <hr className="solid" />
       <div className="items-por-categoria">
         {categorias.map((categoria) => (
           <div key={categoria} className="categoria-grupo">
-            <h3 className="categoria-titulo">{categoria}</h3>
+            <h3 className="categoria-titulo">
+              <i className="nf" style={{fontSize: '20px'}}> {categoriaIconos[categoria] || ''} </i>
+              {categoria}
+            </h3>
             <ul>
               {itemsPorCategoria[categoria].map((item) => {
                 const idKey = item.character_item_id || item.id;
