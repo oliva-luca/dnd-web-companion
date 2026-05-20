@@ -14,7 +14,7 @@ export function useCharacters(campaignId = 1) {
     const { data, error } = await supabase
       .from('characters')
       .select(
-        `id, name, class, level, character_items(id, count, is_equipped, public, notes, items(id, name, weight, value, category))`
+        `id, name, class, level, character_items(id, count, is_equipped, public, notes, items(id, name, weight, value, category, description))`
       )
       .eq('campaign_id', campaignId)
 
@@ -40,6 +40,8 @@ export function useCharacters(campaignId = 1) {
           is_equipped: ci.is_equipped ?? false,
           public: ci.public ?? true,
           character_item_id: ci.id,
+          descripcion: ci.items.description,
+          notas: ci.notes
         }))
 
         return {

@@ -5,6 +5,8 @@ export interface Item {
   peso: number;
   valor: number;
   categoria: string;
+  descripcion?: string;
+  notas?: string;
   is_equipped?: boolean;
   public?: boolean;
   character_item_id?: number;
@@ -15,4 +17,3 @@ export interface Jugador {
   nombre: string;
   inventario: Item[];
 }
-

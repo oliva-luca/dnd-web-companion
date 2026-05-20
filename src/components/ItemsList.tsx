@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
@@ -39,6 +39,26 @@ type ItemsListProps = {
 };
 
 export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEquipped, onTogglePublic, openMenuId, setOpenMenuId }) => {
+  const [openTextDisplay, setOpenTextDisplay] = useState<{
+    [key: number]: 'description' | 'notes' | null;
+  }>({});
+
+  const handleTextDisplayToggle = (
+    itemId: number,
+    type: 'description' | 'notes',
+  ) => {
+    setOpenTextDisplay((prev) => ({
+      ...prev,
+      [itemId]: prev[itemId] === type ? null : type,
+    }));
+  };
+
+  useEffect(() => {
+    if (openMenuId === null) {
+      setOpenTextDisplay({});
+    }
+  }, [openMenuId]);
+
   useEffect(() => {
     console.debug('ItemsList props - items count:', items.length, 'jugador:', jugador)
   }, [items, jugador])
@@ -63,6 +83,8 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
               {itemsPorCategoria[categoria].map((item) => {
                 const idKey = item.character_item_id || item.id;
                 const menuOpen = openMenuId === idKey;
+                const textDisplayOpen = openTextDisplay[idKey];
+
                 return (
                   <li
                     key={idKey}
@@ -89,8 +111,18 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
                     {menuOpen && (
                       <div className="item-menu" id={`menu-${idKey}`}>
                         <div>
-                          <button className="simple-button">Detalles</button>
-                          <button className="simple-button">Notas</button>
+                          <button
+                            className="simple-button"
+                            onClick={() => handleTextDisplayToggle(idKey, 'description')}
+                          >
+                            Descripción
+                          </button>
+                          <button
+                            className="simple-button"
+                            onClick={() => handleTextDisplayToggle(idKey, 'notes')}
+                          >
+                            Notas
+                          </button>
                         </div>
 
                         <div>
@@ -128,6 +160,13 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
                             <i className="nf">{item.public ? '' : ''}</i>
                           </button>
                         </div>
+                      </div>
+                    )}
+
+                    {textDisplayOpen && (
+                      <div className="text-display">
+                        {textDisplayOpen === 'description' && <p>{item.descripcion || 'No hay descripción disponible.'}</p>}
+                        {textDisplayOpen === 'notes' && <p>{item.notas || 'No hay notas disponibles.'}</p>}
                       </div>
                     )}
                   </li>
