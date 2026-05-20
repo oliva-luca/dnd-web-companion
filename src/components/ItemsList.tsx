@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
@@ -34,14 +34,17 @@ type ItemsListProps = {
   jugador: string;
   onToggleEquipped?: (characterItemId: number, currentEquipped: boolean) => void;
   onTogglePublic?: (characterItemId: number, currentPublic: boolean) => void;
+  onUpdateItemNotes?: (characterItemId: number, notes: string) => void;
   openMenuId: number | null;
   setOpenMenuId: (id: number | null) => void;
 };
 
-export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEquipped, onTogglePublic, openMenuId, setOpenMenuId }) => {
+export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEquipped, onTogglePublic, onUpdateItemNotes, openMenuId, setOpenMenuId }) => {
   const [openTextDisplay, setOpenTextDisplay] = useState<{
     [key: number]: 'description' | 'notes' | null;
   }>({});
+  const [editableNotes, setEditableNotes] = useState<{ [key: number]: string }>({});
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleTextDisplayToggle = (
     itemId: number,
@@ -53,11 +56,32 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
     }));
   };
 
+  const handleNotesChange = (itemId: number, newNotes: string) => {
+    setEditableNotes((prev) => ({ ...prev, [itemId]: newNotes }));
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  const handleSaveNotes = (itemId: number) => {
+    if (onUpdateItemNotes && editableNotes[itemId] !== undefined) {
+      onUpdateItemNotes(itemId, editableNotes[itemId]);
+    }
+  };
+
   useEffect(() => {
     if (openMenuId === null) {
       setOpenTextDisplay({});
     }
   }, [openMenuId]);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [openTextDisplay]);
 
   useEffect(() => {
     console.debug('ItemsList props - items count:', items.length, 'jugador:', jugador)
@@ -166,7 +190,19 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
                     {textDisplayOpen && (
                       <div className="text-display">
                         {textDisplayOpen === 'description' && <p>{item.descripcion || 'No hay descripción disponible.'}</p>}
-                        {textDisplayOpen === 'notes' && <p>{item.notas || 'No hay notas disponibles.'}</p>}
+                        {textDisplayOpen === 'notes' && (
+                          <div className="notes-container">
+                            <textarea
+                              ref={textareaRef}
+                              className="notes-textarea"
+                              defaultValue={item.notas || ''}
+                              onChange={(e) => handleNotesChange(idKey, e.target.value)}
+                            />
+                            <div className="save-button-container">
+                              <button className="simple-button" onClick={() => handleSaveNotes(idKey)}>Guardar</button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </li>

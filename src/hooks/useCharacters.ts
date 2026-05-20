@@ -120,6 +120,27 @@ export function useCharacters(campaignId = 1) {
     }
   }, [fetchData])
 
-  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic }
-}
+  const updateItemNotes = useCallback(async (characterItemId: number, notes: string) => {
+    try {
+      const { error } = await supabase
+        .from('character_items')
+        .update({ notes })
+        .eq('id', characterItemId)
 
+      if (error) {
+        console.error('Error updating notes:', error)
+        // Revert by reloading
+        fetchData()
+        return
+      }
+
+      // Re-fetch to ensure consistency
+      fetchData()
+    } catch (e) {
+      console.error('Error updating notes:', e)
+      fetchData()
+    }
+  }, [fetchData])
+
+  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes }
+}
