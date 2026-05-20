@@ -40,7 +40,7 @@ export function useCharacters(campaignId = 1) {
           is_equipped: ci.is_equipped ?? false,
           public: ci.public ?? true,
           character_item_id: ci.id,
-          descripcion: ci.items.description,
+          descripcion: ci.items?.description,
           notas: ci.notes
         }))
 
@@ -70,77 +70,53 @@ export function useCharacters(campaignId = 1) {
     }
   }, [fetchData])
 
-  const toggleItemEquipped = useCallback(async (characterItemId: number, currentEquipped: boolean) => {
-    const newEquipped = !currentEquipped
+  const createOptimisticUpdater = <T,>(
+    updateFn: (item: Item, value: T) => Item,
+    dbUpdate: (characterItemId: number, value: T) => Promise<any>
+  ) => {
+    return async (characterItemId: number, value: T) => {
+      const originalCharacters = characters;
 
-    // Update in Supabase
-    try {
-      const { error } = await supabase
-        .from('character_items')
-        .update({ is_equipped: newEquipped })
-        .eq('id', characterItemId)
+      // Optimistically update local state
+      setCharacters(prev =>
+        prev.map(c => ({
+          ...c,
+          inventario: c.inventario.map(item =>
+            item.character_item_id === characterItemId
+              ? updateFn(item, value)
+              : item
+          ),
+        }))
+      );
 
-      if (error) {
-        console.error('Error updating equipped status:', error)
-        // Revert by reloading
-        fetchData()
-        return
+      try {
+        const { error } = await dbUpdate(characterItemId, value);
+        if (error) {
+          console.error('Error updating item:', error);
+          setCharacters(originalCharacters); // Revert on error
+        }
+      } catch (e) {
+        console.error('Exception updating item:', e);
+        setCharacters(originalCharacters); // Revert on exception
       }
+    };
+  };
 
-      // Re-fetch to ensure consistency
-      fetchData()
-    } catch (e) {
-      console.error('Error toggling equipped:', e)
-      fetchData()
-    }
-  }, [fetchData])
+  const toggleItemEquipped = createOptimisticUpdater(
+    (item, value) => ({ ...item, is_equipped: !item.is_equipped }),
+    (id, value) => supabase.from('character_items').update({ is_equipped: !value }).eq('id', id)
+  );
 
-  const toggleItemPublic = useCallback(async (characterItemId: number, currentPublic: boolean) => {
-    const newPublic = !currentPublic
+  const toggleItemPublic = createOptimisticUpdater(
+    (item, value) => ({ ...item, public: !item.public }),
+    (id, value) => supabase.from('character_items').update({ public: !value }).eq('id', id)
+  );
 
-    // Update in Supabase
-    try {
-      const { error } = await supabase
-        .from('character_items')
-        .update({ public: newPublic })
-        .eq('id', characterItemId)
+  const updateItemNotes = createOptimisticUpdater(
+    (item, value) => ({ ...item, notas: value as string }),
+    (id, value) => supabase.from('character_items').update({ notes: value }).eq('id', id)
+  );
 
-      if (error) {
-        console.error('Error updating public status:', error)
-        // Revert by reloading
-        fetchData()
-        return
-      }
-
-      // Re-fetch to ensure consistency
-      fetchData()
-    } catch (e) {
-      console.error('Error toggling public:', e)
-      fetchData()
-    }
-  }, [fetchData])
-
-  const updateItemNotes = useCallback(async (characterItemId: number, notes: string) => {
-    try {
-      const { error } = await supabase
-        .from('character_items')
-        .update({ notes })
-        .eq('id', characterItemId)
-
-      if (error) {
-        console.error('Error updating notes:', error)
-        // Revert by reloading
-        fetchData()
-        return
-      }
-
-      // Re-fetch to ensure consistency
-      fetchData()
-    } catch (e) {
-      console.error('Error updating notes:', e)
-      fetchData()
-    }
-  }, [fetchData])
 
   return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes }
 }

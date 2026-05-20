@@ -7,8 +7,7 @@ import { useCharacters } from './hooks/useCharacters';
 const App: React.FC = () => {
   const [selectedJugadorId, setSelectedJugadorId] = useState<number | null>(null);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-  const uc = useCharacters(1);
-  const { characters, loading, error, reload, toggleItemEquipped, toggleItemPublic } = uc;
+  const { characters, loading, error, reload, toggleItemEquipped, toggleItemPublic, updateItemNotes } = useCharacters(1);
 
   // select first character on load
   useEffect(() => {
@@ -33,6 +32,7 @@ const App: React.FC = () => {
             jugador={jugadorSeleccionado ? jugadorSeleccionado.nombre : 'Seleccionar jugador'}
             onToggleEquipped={toggleItemEquipped}
             onTogglePublic={toggleItemPublic}
+            onUpdateItemNotes={updateItemNotes}
             openMenuId={openMenuId}
             setOpenMenuId={setOpenMenuId}
           />
