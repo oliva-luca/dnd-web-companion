@@ -96,6 +96,14 @@ i.nf {
     color: inherit;
 }
 
+.controls {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
 @media (max-width: 1024px) {
     .app-main {
         flex-direction: column;

@@ -3,6 +3,7 @@ import { Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
 import './ItemMenu.css';
+import Linkify from 'react-linkify';
 
 const agruparPorCategoriaYOrdenar = (items: Item[]): Record<string, Item[]> => {
   // 1. Primero creamos una copia ordenada alfabéticamente de todos los ítems
@@ -189,7 +190,17 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
 
                     {textDisplayOpen && (
                       <div className="text-display">
-                        {textDisplayOpen === 'description' && <p>{item.descripcion || 'No hay descripción disponible.'}</p>}
+                        {textDisplayOpen === 'description' && (
+                          <p style={{ whiteSpace: 'pre-wrap' }}>
+                            <Linkify componentDecorator={(decoratedHref: string, decoratedText: string, key: React.Key) => (
+                              <a target="_blank" rel="noopener noreferrer" href={decoratedHref} key={key}>
+                                {decoratedText}
+                              </a>
+                            )}>
+                              {item.descripcion || 'No hay descripción disponible.'}
+                            </Linkify>
+                          </p>
+                        )}
                         {textDisplayOpen === 'notes' && (
                           <div className="notes-container">
                             <textarea
