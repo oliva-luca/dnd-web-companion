@@ -70,23 +70,24 @@ export function useCharacters(campaignId = 1) {
     }
   }, [fetchData])
 
-  const createOptimisticUpdater = <T,>(
-    updateFn: (item: Item, value: T) => Item,
-    dbUpdate: (characterItemId: number, value: T) => Promise<any>
+  const createOptimisticUpdater = <T>(
+    updateFn: (item: Item, _value: T) => Item,
+    // loosened return type to allow supabase's builder-like return type without TS errors
+    dbUpdate: (characterItemId: number, value: T) => any,
   ) => {
     return async (characterItemId: number, value: T) => {
       const originalCharacters = characters;
 
       // Optimistically update local state
-      setCharacters(prev =>
-        prev.map(c => ({
+      setCharacters((prev) =>
+        prev.map((c) => ({
           ...c,
-          inventario: c.inventario.map(item =>
+          inventario: c.inventario.map((item) =>
             item.character_item_id === characterItemId
               ? updateFn(item, value)
-              : item
+              : item,
           ),
-        }))
+        })),
       );
 
       try {
@@ -103,20 +104,25 @@ export function useCharacters(campaignId = 1) {
   };
 
   const toggleItemEquipped = createOptimisticUpdater(
-    (item, value) => ({ ...item, is_equipped: !item.is_equipped }),
-    (id, value) => supabase.from('character_items').update({ is_equipped: !value }).eq('id', id)
+    (item, _value) => ({ ...item, is_equipped: !item.is_equipped }),
+    (id, value) =>
+      supabase
+        .from('character_items')
+        .update({ is_equipped: !value })
+        .eq('id', id),
   );
 
   const toggleItemPublic = createOptimisticUpdater(
-    (item, value) => ({ ...item, public: !item.public }),
-    (id, value) => supabase.from('character_items').update({ public: !value }).eq('id', id)
+    (item, _value) => ({ ...item, public: !item.public }),
+    (id, value) =>
+      supabase.from('character_items').update({ public: !value }).eq('id', id),
   );
 
   const updateItemNotes = createOptimisticUpdater(
     (item, value) => ({ ...item, notas: value as string }),
-    (id, value) => supabase.from('character_items').update({ notes: value }).eq('id', id)
+    (id, value) =>
+      supabase.from('character_items').update({ notes: value }).eq('id', id),
   );
-
 
   return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes }
 }
