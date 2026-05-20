@@ -99,7 +99,7 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
                           >
                             {item.is_equipped ? 'Desequipar' : 'Equipar'}
                           </button>
-                          <button className="simple-button"></button>
+                          <button className="simple-button">Usar</button>
                           <button
                             className="simple-button"
                             onClick={() => {
@@ -111,7 +111,7 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
                               }
                             }}
                           >
-                            {item.public ? '👁️' : '🔒'}
+                            <i className="nf">{item.public ? '' : ''}</i>
                           </button>
                         </div>
                       </div>

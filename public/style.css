@@ -1,15 +1,5 @@
-@font-face {
-    font-family: "JetBrains Sans";
-    src: url("fonts/JetBrainsSans-Regular.woff2");
-}
-
-@font-face {
-    font-family: "JetBrains Mono";
-    src: url("fonts/JetBrainsMono-Regular.woff2");
-}
-
 :root {
-    font-family: "JetBrains Sans", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-weight: 300;
     color: #000000;
     background-color: #000000;
@@ -89,6 +79,16 @@ img {
     margin: 0 auto;
     width: 100%;
     justify-content: center;
+}
+
+i.nf {
+    font-size: 14px;
+    font-family: "Nerd Font Symbols", "Symbols Nerd Font", "JetBrainsMono Nerd Font", "JetBrainsMono NF", monospace; /* Try multiple fallback names */
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    color: inherit;
 }
 
 @media (max-width: 1024px) {
