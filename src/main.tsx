@@ -12,25 +12,28 @@ interface CharacterSelectScreenProps {
 const CharacterSelectScreen: React.FC<CharacterSelectScreenProps> = ({ onSelect }) => {
   const { characters, loading } = useCharacters(1);
 
- return (
-   <div className="app-container">
-     <main className="app-main">
-       {/* If loading and no characters yet, show full loading. Otherwise keep showing current data and show small loader */}
-       {loading && characters.length === 0 ? (
-         <div className="list-container">
-           <h2>Cargando...</h2>
-         </div>
-       ) : (
-         <JugadoresList
-           jugadores={characters}
-           selectedId={-1}
-           onSelect={onSelect}
-         ></JugadoresList>
-       )}
-     </main>
-   </div>
- );
-}
+  const filteredCharacters = characters
+    .filter(c => c.nombre !== 'Party')
+    .map(c => c.nombre === 'Mundo' ? { ...c, nombre: 'Dungeon Master' } : c);
+
+  return (
+    <div className="app-container">
+      <main className="app-main">
+        {loading && characters.length === 0 ? (
+          <div className="list-container">
+            <h2>Cargando...</h2>
+          </div>
+        ) : (
+          <JugadoresList
+            jugadores={filteredCharacters}
+            selectedId={-1}
+            onSelect={onSelect}
+          />
+        )}
+      </main>
+    </div>
+  );
+};
 
 interface AppProps {
   selectedJugadorId: number;
@@ -47,7 +50,6 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
   return (
     <div className="app-container">
       <main className="app-main">
-        {/* If loading and no characters yet, show full loading. Otherwise keep showing current data and show small loader */}
         {loading && characters.length === 0 ? (
           <div className="list-container">
             <h2>Cargando...</h2>
@@ -103,10 +105,8 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
 
 // Componente principal que actúa como enrutador
 const MainRouter: React.FC = () => {
-  // Obtenemos el ID del personaje seleccionado usando tu hook
   const [selectedCharacterId, setSelectedCharacterId] = useSelectedCharacter();
 
-  // Renderizado condicional: si hay ID mostramos la App, si no, la pantalla de selección
   return selectedCharacterId !== -1 ? (
     <App selectedJugadorId={selectedCharacterId} setSelectedJugadorId={setSelectedCharacterId} />
   ) : (
@@ -114,7 +114,6 @@ const MainRouter: React.FC = () => {
   );
 };
 
-// Renderizar la aplicación
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>

@@ -13,7 +13,12 @@ const agruparPorCategoriaYOrdenar = (items: Item[], jugadorId: number, selectedC
   return itemsOrdenados.reduce((acc, item) => {
     if (!acc[item.categoria])
       acc[item.categoria] = [];
-    if ((selectedCharacterId == jugadorId || item.public)) {
+    if (
+      selectedCharacterId == jugadorId ||
+      item.public ||
+      selectedCharacterId?.toString() ==
+        window.localStorage.getItem('dungeon_master')
+    ) {
       acc[item.categoria].push(item);
     }
     return acc;
@@ -161,7 +166,7 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                             ) : null}
                         </div>
 
-                        {selectedCharacterId == jugadorId ? (
+                        {selectedCharacterId == jugadorId || selectedCharacterId.toString() == window.localStorage.getItem('dungeon_master') ? (
                           <div>
                             <button
                               className="simple-button"

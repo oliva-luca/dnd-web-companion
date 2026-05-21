@@ -51,8 +51,32 @@ export function useCharacters(campaignId = 1) {
         }
       })
 
-      console.debug('Mapped characters:', mapped)
-      setCharacters(mapped)
+      // --- Custom Logic ---
+      const mundo = mapped.find(c => c.nombre === 'Mundo');
+      if (mundo) {
+        localStorage.setItem('dungeon_master', mundo.id.toString());
+      }
+
+      const otherCharacters = mapped.filter(c => c.nombre !== 'Mundo');
+      const publicItems = mapped
+        .filter(c => c.nombre !== 'Mundo')
+        .flatMap(c => c.inventario)
+        .filter(item => item.public);
+
+      const party: Jugador = {
+        id: 0,
+        nombre: 'Party',
+        inventario: publicItems,
+      };
+
+      const finalCharacters = [party, ...otherCharacters];
+      if (mundo) {
+        finalCharacters.push(mundo);
+      }
+      // --- End Custom Logic ---
+
+      console.debug('Mapped characters:', finalCharacters)
+      setCharacters(finalCharacters)
     } catch (e) {
       setError(e)
       console.error('Error mapping characters', e)
