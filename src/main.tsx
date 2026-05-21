@@ -104,7 +104,7 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
 // Componente principal que actúa como enrutador
 const MainRouter: React.FC = () => {
   // Obtenemos el ID del personaje seleccionado usando tu hook
-  const [selectedCharacterId, setSelectedCharacterId] = useSelectedCharacter(-1);
+  const [selectedCharacterId, setSelectedCharacterId] = useSelectedCharacter();
 
   // Renderizado condicional: si hay ID mostramos la App, si no, la pantalla de selección
   return selectedCharacterId !== -1 ? (

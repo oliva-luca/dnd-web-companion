@@ -3,17 +3,17 @@ import { useState, useEffect } from 'react';
 // Definimos la clave de forma constante y global para este hook
 const STORAGE_KEY = 'app_selected_character_id';
 
-export const useSelectedCharacter = (initialValue: number | -1) => {
+export const useSelectedCharacter = () => {
   // 1. Inicializamos el estado leyendo de localStorage (si existe)
   const [selectedCharacterId, setSelectedCharacterId] = useState<number>(
     () => {
       try {
         const item = window.localStorage.getItem(STORAGE_KEY);
         // Si hay un item guardado, lo parseamos. Si no, usamos el valor inicial.
-        return item ? JSON.parse(item) : initialValue;
+        return item ? JSON.parse(item) : -1;
       } catch (error) {
         console.warn('Error leyendo de localStorage:', error);
-        return initialValue;
+        return -1;
       }
     },
   );
