@@ -143,53 +143,64 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                         <div>
                           <button
                             className="simple-button"
-                            onClick={() => handleTextDisplayToggle(idKey, 'description')}
+                            onClick={() =>
+                              handleTextDisplayToggle(idKey, 'description')
+                            }
                           >
                             Descripción
                           </button>
+                          {selectedCharacterId == jugadorId ? (
                           <button
                             className="simple-button"
-                            onClick={() => handleTextDisplayToggle(idKey, 'notes')}
+                            onClick={() =>
+                              handleTextDisplayToggle(idKey, 'notes')
+                            }
                           >
                             Notas
                           </button>
+                            ) : null}
                         </div>
 
-                        <div>
-                          <button
-                            className="simple-button"
-                            style={{ justifyContent: 'flex-end' }}
-                          >
-                            Borrar
-                          </button>
-                          <button
-                            className="equip-button"
-                            onClick={async () => {
-                              if (item.character_item_id && onToggleEquipped) {
-                                onToggleEquipped(
-                                  item.character_item_id,
-                                  item.is_equipped ?? false,
-                                );
-                              }
-                            }}
-                          >
-                            {item.is_equipped ? 'Desequipar' : 'Equipar'}
-                          </button>
-                          <button className="simple-button">Usar</button>
-                          <button
-                            className="simple-button"
-                            onClick={() => {
-                              if (item.character_item_id && onTogglePublic) {
-                                onTogglePublic(
-                                  item.character_item_id,
-                                  item.public ?? true,
-                                );
-                              }
-                            }}
-                          >
-                            <i className="nf">{item.public ? '' : ''}</i>
-                          </button>
-                        </div>
+                        {selectedCharacterId == jugadorId ? (
+                          <div>
+                            <button
+                              className="simple-button"
+                              style={{ justifyContent: 'flex-end' }}
+                            >
+                              Borrar
+                            </button>
+                            <button
+                              className="equip-button"
+                              onClick={async () => {
+                                if (
+                                  item.character_item_id &&
+                                  onToggleEquipped
+                                ) {
+                                  onToggleEquipped(
+                                    item.character_item_id,
+                                    item.is_equipped ?? false,
+                                  );
+                                }
+                              }}
+                            >
+                              {item.is_equipped ? 'Desequipar' : 'Equipar'}
+                            </button>
+                            <button className="simple-button">Usar</button>
+                            <button
+                              className="simple-button"
+                              onClick={() => {
+                                if (item.character_item_id && onTogglePublic) {
+                                  onTogglePublic(
+                                    item.character_item_id,
+                                    item.public ?? true,
+                                  );
+                                }
+                              }}
+                            >
+                              <i className="nf">{item.public ? '' : ''}</i>
+                            </button>
+                          </div>
+                        ) : null}
                       </div>
                     )}
 
@@ -197,12 +208,24 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                       <div className="text-display">
                         {textDisplayOpen === 'description' && (
                           <p style={{ whiteSpace: 'pre-wrap' }}>
-                            <Linkify componentDecorator={(decoratedHref: string, decoratedText: string, key: React.Key) => (
-                              <a target="_blank" rel="noopener noreferrer" href={decoratedHref} key={key}>
-                                {decoratedText}
-                              </a>
-                            )}>
-                              {item.descripcion || 'No hay descripción disponible.'}
+                            <Linkify
+                              componentDecorator={(
+                                decoratedHref: string,
+                                decoratedText: string,
+                                key: React.Key,
+                              ) => (
+                                <a
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  href={decoratedHref}
+                                  key={key}
+                                >
+                                  {decoratedText}
+                                </a>
+                              )}
+                            >
+                              {item.descripcion ||
+                                'No hay descripción disponible.'}
                             </Linkify>
                           </p>
                         )}
@@ -212,10 +235,17 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                               ref={textareaRef}
                               className="notes-textarea"
                               defaultValue={item.notas || ''}
-                              onChange={(e) => handleNotesChange(idKey, e.target.value)}
+                              onChange={(e) =>
+                                handleNotesChange(idKey, e.target.value)
+                              }
                             />
                             <div className="save-button-container">
-                              <button className="simple-button" onClick={() => handleSaveNotes(idKey)}>Guardar</button>
+                              <button
+                                className="simple-button"
+                                onClick={() => handleSaveNotes(idKey)}
+                              >
+                                Guardar
+                              </button>
                             </div>
                           </div>
                         )}
