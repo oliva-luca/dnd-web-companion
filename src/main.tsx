@@ -41,7 +41,8 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const { characters, loading, error, reload, toggleItemEquipped, toggleItemPublic, updateItemNotes } = useCharacters(1);
 
-  const jugadorSeleccionado = characters.find((j) => j.id === selectedJugadorId) || null;
+  const [inventarioSeleccionado, setInventarioSeleccionado] = useState<number>(selectedJugadorId);
+  const jugadorSeleccionado = characters.find((j) => j.id === inventarioSeleccionado) || null;
 
   return (
     <div className="app-container">
@@ -59,6 +60,7 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
                 ? jugadorSeleccionado.nombre
                 : 'Seleccionar jugador'
             }
+            jugadorId={jugadorSeleccionado?.id || -1}
             onToggleEquipped={toggleItemEquipped}
             onTogglePublic={toggleItemPublic}
             onUpdateItemNotes={updateItemNotes}
@@ -73,10 +75,14 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
 
         <div className="controls">
           <button onClick={() => setSelectedJugadorId(-1)} disabled={loading}>
-            <i className="nf" style={{fontSize: 24}}></i>
+            <i className="nf" style={{ fontSize: 24 }}>
+              
+            </i>
           </button>
           <button onClick={() => reload()} disabled={loading}>
-            <i className="nf" style={{fontSize: 24}}></i>
+            <i className="nf" style={{ fontSize: 24 }}>
+              
+            </i>
           </button>
           {error && (
             <div className="error">
@@ -87,8 +93,8 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
 
         <JugadoresList
           jugadores={characters}
-          selectedId={selectedJugadorId}
-          onSelect={setSelectedJugadorId}
+          selectedId={inventarioSeleccionado}
+          onSelect={setInventarioSeleccionado}
         />
       </main>
     </div>
@@ -98,10 +104,10 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
 // Componente principal que actúa como enrutador
 const MainRouter: React.FC = () => {
   // Obtenemos el ID del personaje seleccionado usando tu hook
-  const [selectedCharacterId, setSelectedCharacterId] = useSelectedCharacter();
+  const [selectedCharacterId, setSelectedCharacterId] = useSelectedCharacter(-1);
 
   // Renderizado condicional: si hay ID mostramos la App, si no, la pantalla de selección
-  return selectedCharacterId ? (
+  return selectedCharacterId !== -1 ? (
     <App selectedJugadorId={selectedCharacterId} setSelectedJugadorId={setSelectedCharacterId} />
   ) : (
     <CharacterSelectScreen onSelect={setSelectedCharacterId} />

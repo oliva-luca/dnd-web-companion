@@ -4,15 +4,18 @@ import './shared.css';
 import './ItemsList.css';
 import './ItemMenu.css';
 import Linkify from 'react-linkify';
+import { useSelectedCharacter } from '../hooks/useSelectedCharacter.ts';
 
-const agruparPorCategoriaYOrdenar = (items: Item[]): Record<string, Item[]> => {
-  // 1. Primero creamos una copia ordenada alfabéticamente de todos los ítems
+const agruparPorCategoriaYOrdenar = (items: Item[], jugadorId: number, selectedCharacterId: number | null): Record<string, Item[]> => {
   const itemsOrdenados = [...items].sort((a, b) => a.nombre.localeCompare(b.nombre));
 
   // 2. Luego hacemos el reduce sobre la lista ya ordenada
   return itemsOrdenados.reduce((acc, item) => {
-    if (!acc[item.categoria]) acc[item.categoria] = [];
-    acc[item.categoria].push(item);
+    if (!acc[item.categoria])
+      acc[item.categoria] = [];
+    if ((selectedCharacterId == jugadorId || item.public)) {
+      acc[item.categoria].push(item);
+    }
     return acc;
   }, {} as Record<string, Item[]>);
 };
@@ -33,6 +36,7 @@ const categoriaIconos: Record<string, string> = {
 type ItemsListProps = {
   items: Item[];
   jugador: string;
+  jugadorId: number;
   onToggleEquipped?: (characterItemId: number, currentEquipped: boolean) => void;
   onTogglePublic?: (characterItemId: number, currentPublic: boolean) => void;
   onUpdateItemNotes?: (characterItemId: number, notes: string) => void;
@@ -40,12 +44,13 @@ type ItemsListProps = {
   setOpenMenuId: (id: number | null) => void;
 };
 
-export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEquipped, onTogglePublic, onUpdateItemNotes, openMenuId, setOpenMenuId }) => {
+export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId, onToggleEquipped, onTogglePublic, onUpdateItemNotes, openMenuId, setOpenMenuId }) => {
   const [openTextDisplay, setOpenTextDisplay] = useState<{
     [key: number]: 'description' | 'notes' | null;
   }>({});
   const [editableNotes, setEditableNotes] = useState<{ [key: number]: string }>({});
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedCharacterId] = useSelectedCharacter();
 
   const handleTextDisplayToggle = (
     itemId: number,
@@ -87,7 +92,7 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, onToggleEq
   useEffect(() => {
     console.debug('ItemsList props - items count:', items.length, 'jugador:', jugador)
   }, [items, jugador])
-  const itemsPorCategoria = agruparPorCategoriaYOrdenar(items);
+  const itemsPorCategoria = agruparPorCategoriaYOrdenar(items, jugadorId, selectedCharacterId);
   const categorias = Object.keys(itemsPorCategoria).sort();
   const pesoInventario = pesoTotal(items);
 

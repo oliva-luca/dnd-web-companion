@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 // Definimos la clave de forma constante y global para este hook
 const STORAGE_KEY = 'app_selected_character_id';
 
-export const useSelectedCharacter = (initialValue: string | null = null) => {
+export const useSelectedCharacter = (initialValue: number | -1) => {
   // 1. Inicializamos el estado leyendo de localStorage (si existe)
-  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(
+  const [selectedCharacterId, setSelectedCharacterId] = useState<number>(
     () => {
       try {
         const item = window.localStorage.getItem(STORAGE_KEY);
