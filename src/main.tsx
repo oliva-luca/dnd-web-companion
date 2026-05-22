@@ -4,17 +4,25 @@ import ItemsList from './components/ItemsList';
 import JugadoresList from './components/JugadoresList';
 import { useCharacters } from './hooks/useCharacters';
 import { useSelectedCharacter } from './hooks/useSelectedCharacter.ts';
+import Popup from './components/Popup';
+import CreateCharacterForm from './components/CreateCharacterForm';
 
 interface CharacterSelectScreenProps {
   onSelect: (id: number) => void;
 }
 
 const CharacterSelectScreen: React.FC<CharacterSelectScreenProps> = ({ onSelect }) => {
-  const { characters, loading } = useCharacters(1);
+  const { characters, loading, createCharacter } = useCharacters(1);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const filteredCharacters = characters
     .filter(c => c.nombre !== 'Party')
     .map(c => c.nombre === 'Mundo' ? { ...c, nombre: 'Dungeon Master' } : c);
+
+  const handleCreateCharacter = async (name: string, characterClass: number, level: number) => {
+    await createCharacter(name, characterClass, level);
+    setIsPopupOpen(false);
+  };
 
   return (
     <div className="app-container">
@@ -24,11 +32,24 @@ const CharacterSelectScreen: React.FC<CharacterSelectScreenProps> = ({ onSelect 
             <h2>Cargando...</h2>
           </div>
         ) : (
-          <JugadoresList
-            jugadores={filteredCharacters}
-            selectedId={-1}
-            onSelect={onSelect}
-          />
+          <div className="character-select-container">
+            <JugadoresList
+              jugadores={filteredCharacters}
+              selectedId={-1}
+              onSelect={onSelect}
+            />
+            <button className="big-button" onClick={() => setIsPopupOpen(true)}>
+              Crear Personaje
+            </button>
+          </div>
+        )}
+        {isPopupOpen && (
+          <Popup title="Crear Personaje" onClose={() => setIsPopupOpen(false)}>
+            <CreateCharacterForm
+              onSubmit={handleCreateCharacter}
+              onCancel={() => setIsPopupOpen(false)}
+            />
+          </Popup>
         )}
       </main>
     </div>

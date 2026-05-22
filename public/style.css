@@ -104,6 +104,12 @@ i.nf {
     left: 20px;
 }
 
+.character-select-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 @media (max-width: 1024px) {
     .app-main {
         flex-direction: column;

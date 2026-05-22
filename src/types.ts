@@ -1,3 +1,19 @@
+export enum CharacterClasses {
+  'Artífice',
+  'Bárbaro',
+  'Bardo',
+  'Brujo',
+  'Clérigo',
+  'Druida',
+  'Explorador',
+  'Guerrero',
+  'Mago',
+  'Monje',
+  'Paladín',
+  'Pícaro',
+  'Hechicero',
+}
+
 export interface Item {
   id: number;
   nombre: string;

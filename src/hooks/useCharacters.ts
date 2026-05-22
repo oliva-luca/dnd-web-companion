@@ -148,5 +148,18 @@ export function useCharacters(campaignId = 1) {
       supabase.from('character_items').update({ notes: value }).eq('id', id),
   );
 
-  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes }
+  const createCharacter = async (name: string, characterClass: number, level: number) => {
+    const { error } = await supabase
+      .from('characters')
+      .insert([{ name, class: characterClass, level, campaign_id: campaignId }]);
+
+    if (error) {
+      console.error('Error creating character:', error);
+      setError(error);
+    } else {
+      fetchData();
+    }
+  };
+
+  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter }
 }
