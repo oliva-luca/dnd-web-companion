@@ -1,32 +1,32 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Item } from '../types';
+import { CharacterItem } from '../types';
 import './shared.css';
 import './ItemsList.css';
 import './ItemMenu.css';
 import Linkify from 'react-linkify';
 import { useSelectedCharacter } from '../hooks/useSelectedCharacter.ts';
 
-const agruparPorCategoriaYOrdenar = (items: Item[], jugadorId: number, selectedCharacterId: number | null): Record<string, Item[]> => {
-  const itemsOrdenados = [...items].sort((a, b) => a.nombre.localeCompare(b.nombre));
+const agruparPorCategoriaYOrdenar = (items: CharacterItem[], jugadorId: number, selectedCharacterId: number | null): Record<string, CharacterItem[]> => {
+  const itemsOrdenados = [...items].sort((a, b) => a.item.name.localeCompare(b.item.name));
 
   // 2. Luego hacemos el reduce sobre la lista ya ordenada
   return itemsOrdenados.reduce((acc, item) => {
-    if (!acc[item.categoria])
-      acc[item.categoria] = [];
+    if (!acc[item.item.category])
+      acc[item.item.category] = [];
     if (
       selectedCharacterId == jugadorId ||
       item.public ||
       selectedCharacterId?.toString() ==
         window.localStorage.getItem('dungeon_master')
     ) {
-      acc[item.categoria].push(item);
+      acc[item.item.category].push(item);
     }
     return acc;
-  }, {} as Record<string, Item[]>);
+  }, {} as Record<string, CharacterItem[]>);
 };
 
-const pesoTotal = (items: Item[]): number => {
-  return items.reduce((total, item) => total + item.peso * item.cantidad, 0);
+const pesoTotal = (items: CharacterItem[]): number => {
+  return items.reduce((total, item) => total + item.item.weight * item.count, 0);
 };
 
 const categoriaIconos: Record<string, string> = {
@@ -39,7 +39,7 @@ const categoriaIconos: Record<string, string> = {
 };
 
 type ItemsListProps = {
-  items: Item[];
+  items: CharacterItem[];
   jugador: string;
   jugadorId: number;
   onToggleEquipped?: (characterItemId: number, currentEquipped: boolean) => void;
@@ -115,22 +115,23 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
               {categoria}
             </h3>
             <ul>
-              {itemsPorCategoria[categoria].map((item) => {
-                const idKey = item.character_item_id || item.id;
+              {itemsPorCategoria[categoria].map((characterItem) => {
+                const { item } = characterItem;
+                const idKey = characterItem.id;
                 const menuOpen = openMenuId === idKey;
                 const textDisplayOpen = openTextDisplay[idKey];
 
                 return (
                   <li
                     key={idKey}
-                    className={`item${item.is_equipped ? ' equipped' : ''}`}
+                    className={`item${characterItem.is_equipped ? ' equipped' : ''}`}
                   >
                     <div className="item-main">
-                      <span className="item-name">{item.nombre}</span>
-                      <span className="cantidad">x{item.cantidad}</span>
-                      <span className="peso">{item.peso}kg</span>
-                      <span className="valor">${item.valor}</span>
-                      {item.character_item_id && onToggleEquipped && (
+                      <span className="item-name">{item.name}</span>
+                      <span className="cantidad">x{characterItem.count}</span>
+                      <span className="peso">{item.weight}kg</span>
+                      <span className="valor">${item.value}</span>
+                      {characterItem.id && onToggleEquipped && (
                         <button
                           className="menu-button"
                           onClick={() => setOpenMenuId(menuOpen ? null : idKey)}
@@ -178,31 +179,31 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                               className="equip-button"
                               onClick={async () => {
                                 if (
-                                  item.character_item_id &&
+                                  characterItem.id &&
                                   onToggleEquipped
                                 ) {
                                   onToggleEquipped(
-                                    item.character_item_id,
-                                    item.is_equipped ?? false,
+                                    characterItem.id,
+                                    characterItem.is_equipped ?? false,
                                   );
                                 }
                               }}
                             >
-                              {item.is_equipped ? 'Desequipar' : 'Equipar'}
+                              {characterItem.is_equipped ? 'Desequipar' : 'Equipar'}
                             </button>
                             <button className="simple-button">Usar</button>
                             <button
                               className="simple-button"
                               onClick={() => {
-                                if (item.character_item_id && onTogglePublic) {
+                                if (characterItem.id && onTogglePublic) {
                                   onTogglePublic(
-                                    item.character_item_id,
-                                    item.public ?? true,
+                                    characterItem.id,
+                                    characterItem.public ?? true,
                                   );
                                 }
                               }}
                             >
-                              <i className="nf">{item.public ? '' : ''}</i>
+                              <i className="nf">{characterItem.public ? '' : ''}</i>
                             </button>
                           </div>
                         ) : null}
@@ -229,7 +230,7 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                                 </a>
                               )}
                             >
-                              {item.descripcion ||
+                              {item.description ||
                                 'No hay descripción disponible.'}
                             </Linkify>
                           </p>
@@ -239,7 +240,7 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                             <textarea
                               ref={textareaRef}
                               className="notes-textarea"
-                              defaultValue={item.notas || ''}
+                              defaultValue={characterItem.notes || ''}
                               onChange={(e) =>
                                 handleNotesChange(idKey, e.target.value)
                               }

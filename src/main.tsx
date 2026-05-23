@@ -6,6 +6,7 @@ import { useCharacters } from './hooks/useCharacters';
 import { useSelectedCharacter } from './hooks/useSelectedCharacter.ts';
 import Popup from './components/Popup';
 import CreateCharacterForm from './components/CreateCharacterForm';
+import CreateItemForm from './components/CreateItemForm';
 
 interface CharacterSelectScreenProps {
   onSelect: (id: number) => void;
@@ -64,6 +65,7 @@ interface AppProps {
 const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) => {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const { characters, loading, error, reload, toggleItemEquipped, toggleItemPublic, updateItemNotes } = useCharacters(1);
+  const [isCreateItemPopupOpen, setCreateItemPopupOpen] = useState(false);
 
   const [inventarioSeleccionado, setInventarioSeleccionado] = useState<number>(selectedJugadorId);
   const jugadorSeleccionado = characters.find((j) => j.id === inventarioSeleccionado) || null;
@@ -119,6 +121,14 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
           selectedId={inventarioSeleccionado}
           onSelect={setInventarioSeleccionado}
         />
+        <button className="big-button" onClick={() => setCreateItemPopupOpen(true)}>
+          Crear Item
+        </button>
+        {isCreateItemPopupOpen && (
+          <Popup title="Crear Item" onClose={() => setCreateItemPopupOpen(false)}>
+            <CreateItemForm onClose={() => setCreateItemPopupOpen(false)} />
+          </Popup>
+        )}
       </main>
     </div>
   );
