@@ -73,6 +73,20 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
   return (
     <div className="app-container">
       <main className="app-main">
+        <button
+          className="big-button"
+          onClick={() => setCreateItemPopupOpen(true)}
+        >
+          Crear Item
+        </button>
+        {isCreateItemPopupOpen && (
+          <Popup
+            title="Crear Item"
+            onClose={() => setCreateItemPopupOpen(false)}
+          >
+            <CreateItemForm onClose={() => setCreateItemPopupOpen(false)} />
+          </Popup>
+        )}
         {loading && characters.length === 0 ? (
           <div className="list-container">
             <h2>Cargando...</h2>
@@ -121,14 +135,6 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
           selectedId={inventarioSeleccionado}
           onSelect={setInventarioSeleccionado}
         />
-        <button className="big-button" onClick={() => setCreateItemPopupOpen(true)}>
-          Crear Item
-        </button>
-        {isCreateItemPopupOpen && (
-          <Popup title="Crear Item" onClose={() => setCreateItemPopupOpen(false)}>
-            <CreateItemForm onClose={() => setCreateItemPopupOpen(false)} />
-          </Popup>
-        )}
       </main>
     </div>
   );
