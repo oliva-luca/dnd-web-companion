@@ -60,6 +60,7 @@ const CreateItemForm: React.FC<CreateItemFormProps> = ({ onClose }) => {
       />
       <textarea
         placeholder="Descripción"
+        style={{width: '72%'}}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         className="p-2 border rounded"
