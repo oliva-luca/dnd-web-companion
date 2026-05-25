@@ -7,6 +7,7 @@ import { useSelectedCharacter } from './hooks/useSelectedCharacter.ts';
 import Popup from './components/Popup';
 import CreateCharacterForm from './components/CreateCharacterForm';
 import CreateItemForm from './components/CreateItemForm';
+import CreateCharacterItemForm from './components/CreateCharacterItem.tsx';
 
 interface CharacterSelectScreenProps {
   onSelect: (id: number) => void;
@@ -64,27 +65,107 @@ interface AppProps {
 
 const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) => {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-  const { characters, loading, error, reload, toggleItemEquipped, toggleItemPublic, updateItemNotes } = useCharacters(1);
+  const {
+    characters,
+    loading,
+    error,
+    reload,
+    toggleItemEquipped,
+    toggleItemPublic,
+    updateItemNotes,
+    createCharacterItem,
+  } = useCharacters(1);
+  const [isAPopupOpen, setIsAPopupOpen] = useState(false);
   const [isCreateItemPopupOpen, setCreateItemPopupOpen] = useState(false);
+  const [isCreateCharacterItemPopupOpen, setIsCreateCharacterItemPopupOpen] =
+    useState(false);
 
-  const [inventarioSeleccionado, setInventarioSeleccionado] = useState<number>(selectedJugadorId);
-  const jugadorSeleccionado = characters.find((j) => j.id === inventarioSeleccionado) || null;
+  const [inventarioSeleccionado, setInventarioSeleccionado] =
+    useState<number>(selectedJugadorId);
+  const jugadorSeleccionado =
+    characters.find((j) => j.id === inventarioSeleccionado) || null;
+
+  const handleCreateCharacterItem = async (
+    itemId: number,
+    ownerId: number,
+    itemCount: number
+  ) => {
+
+    try {
+      await createCharacterItem({
+        item_id: itemId,
+        character_id: ownerId,
+        count: itemCount,
+        is_equipped: false,
+        public: false,
+        notes: '',
+      });
+      setIsCreateCharacterItemPopupOpen(false);
+      setIsAPopupOpen(false);
+      reload();
+    } catch (error) {
+      console.error('Error creating character item:', error);
+    }
+  };
 
   return (
     <div className="app-container">
       <main className="app-main">
-        <button
-          className="big-button"
-          onClick={() => setCreateItemPopupOpen(true)}
-        >
-          Crear Item
-        </button>
+        <div className="character-select-container">
+          <button
+            className="big-button"
+            onClick={() => {
+              if (!isAPopupOpen) {
+                setCreateItemPopupOpen(true);
+                setIsAPopupOpen(true);
+              }
+            }}
+          >
+            Crear Item
+          </button>
+          <button
+            className="big-button"
+            onClick={() => {
+              if (!isAPopupOpen) {
+                setIsCreateCharacterItemPopupOpen(true);
+                setIsAPopupOpen(true);
+              }
+            }}
+          >
+            Agregar Item
+          </button>
+        </div>
         {isCreateItemPopupOpen && (
           <Popup
             title="Crear Item"
-            onClose={() => setCreateItemPopupOpen(false)}
+            onClose={() => {
+              setCreateItemPopupOpen(false);
+              setIsAPopupOpen(false);
+            }}
           >
-            <CreateItemForm onClose={() => setCreateItemPopupOpen(false)} />
+            <CreateItemForm
+              onClose={() => {
+                setCreateItemPopupOpen(false);
+                setIsAPopupOpen(false);
+              }}
+            />
+          </Popup>
+        )}
+        {isCreateCharacterItemPopupOpen && (
+          <Popup
+            title="Crear Item de Personaje"
+            onClose={() => {
+              setIsCreateCharacterItemPopupOpen(false);
+              setIsAPopupOpen(false);
+            }}
+          >
+            <CreateCharacterItemForm
+              onSubmit={handleCreateCharacterItem}
+              onCancel={() => {
+                setIsCreateCharacterItemPopupOpen(false);
+                setIsAPopupOpen(false);
+              }}
+            />
           </Popup>
         )}
         {loading && characters.length === 0 ? (

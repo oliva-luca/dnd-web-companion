@@ -164,6 +164,17 @@ export function useCharacters(campaignId = 1) {
       fetchData();
     }
   };
+  
+  const createCharacterItem = async (characterItem: Omit<CharacterItem, 'id'| 'item'>) => {
+      const { data, error } = await supabase
+        .from('character_items')
+        .insert(characterItem)
+        .select();
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data[0];
+    };
 
-  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter }
+  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter, createCharacterItem }
 }

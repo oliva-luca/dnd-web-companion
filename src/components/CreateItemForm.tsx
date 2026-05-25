@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useItem } from '../hooks/useItem';
+import { useItems } from '../hooks/useItem';
 import { Item } from '../types';
 
 interface CreateItemFormProps {
@@ -12,7 +12,7 @@ const CreateItemForm: React.FC<CreateItemFormProps> = ({ onClose }) => {
   const [value, setValue] = useState(0);
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
-  const { createItem } = useItem();
+  const { createItem } = useItems();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
