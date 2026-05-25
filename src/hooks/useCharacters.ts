@@ -176,5 +176,16 @@ export function useCharacters(campaignId = 1) {
       return data[0];
     };
 
-  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter, createCharacterItem }
+  const changeItemOwner = async (characterItemId: number, newOwnerId: number) => {
+      const { error } = await supabase
+        .from('character_items')
+        .update({ character_id: newOwnerId })
+        .eq('id', characterItemId);
+
+      if (error) {
+        console.error('Error updating item owner:', error);
+      }
+  };
+
+  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter, createCharacterItem, changeItemOwner }
 }

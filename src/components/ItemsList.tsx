@@ -5,6 +5,7 @@ import './ItemsList.css';
 import './ItemMenu.css';
 import Linkify from 'react-linkify';
 import { useSelectedCharacter } from '../hooks/useSelectedCharacter.ts';
+import { useCharacters } from '../hooks/useCharacters.ts';
 
 const agruparPorCategoriaYOrdenar = (items: CharacterItem[], jugadorId: number, selectedCharacterId: number | null): Record<string, CharacterItem[]> => {
   const itemsOrdenados = [...items].sort((a, b) => a.item.name.localeCompare(b.item.name));
@@ -56,6 +57,11 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
   const [editableNotes, setEditableNotes] = useState<{ [key: number]: string }>({});
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [selectedCharacterId] = useSelectedCharacter();
+  const [selectNewOwner, setSelectNewOwner] = useState<number | null>(null);
+  const [selectedNewOwnerId, setSelectedNewOwnerId] = useState<number | null>(null);
+  const { characters, changeItemOwner } = useCharacters();
+  const characterOptions = characters.filter((c) => c.nombre !== 'Party');
+
 
   const handleTextDisplayToggle = (
     itemId: number,
@@ -191,7 +197,35 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                             >
                               {characterItem.is_equipped ? 'Desequipar' : 'Equipar'}
                             </button>
-                            <button className="simple-button">Usar</button>
+                            <button
+                              className="simple-button"
+                              onClick={() => setSelectNewOwner(idKey)}
+                            >
+                              Dar a
+                            </button>
+                            {selectNewOwner === idKey && (
+                              <div className="form-group">
+                                <select
+                                  id="ownerId"
+                                  value={selectedNewOwnerId ?? ''}
+                                  onChange={(e) => setSelectedNewOwnerId(Number(e.target.value))}
+                                  required
+                                >
+                                  {characterOptions.map((character) => (
+                                    <option key={character.id} value={character.id}>
+                                      {character.nombre}
+                                    </option>
+                                  ))}
+                                </select>
+                                <button onClick={() => {
+                                  if (selectedNewOwnerId !== null) {
+                                    changeItemOwner(idKey, selectedNewOwnerId);
+                                    setSelectNewOwner(null);
+                                  }
+                                }}>Confirmar</button>
+                                <button onClick={() => setSelectNewOwner(null)}>Cancelar</button>
+                              </div>
+                            )}
                             <button
                               className="simple-button"
                               onClick={() => {
