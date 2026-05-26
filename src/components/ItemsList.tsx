@@ -59,7 +59,9 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
   const [selectedCharacterId] = useSelectedCharacter();
   const [selectNewOwner, setSelectNewOwner] = useState<number | null>(null);
   const [selectedNewOwnerId, setSelectedNewOwnerId] = useState<number | null>(null);
-  const { characters, changeItemOwner } = useCharacters();
+  const [itemToRemove, setItemToRemove] = useState<number | null>(null);
+  const [removeQuantity, setRemoveQuantity] = useState(1);
+  const { characters, changeItemOwner, setNewItemCount } = useCharacters();
   const characterOptions = characters.filter((c) => c.nombre !== 'Party');
 
 
@@ -162,32 +164,63 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                             Descripción
                           </button>
                           {selectedCharacterId == jugadorId ? (
-                          <button
-                            className="simple-button"
-                            onClick={() =>
-                              handleTextDisplayToggle(idKey, 'notes')
-                            }
-                          >
-                            Notas
-                          </button>
-                            ) : null}
-                        </div>
-
-                        {selectedCharacterId == jugadorId || selectedCharacterId.toString() == window.localStorage.getItem('dungeon_master') ? (
-                          <div>
                             <button
                               className="simple-button"
-                              style={{ justifyContent: 'flex-end' }}
+                              onClick={() =>
+                                handleTextDisplayToggle(idKey, 'notes')
+                              }
                             >
-                              Borrar
+                              Notas
                             </button>
+                          ) : null}
+                        </div>
+                        <div>
+                        <button
+                          className="simple-button"
+                          onClick={() => setSelectNewOwner(idKey)}
+                        >
+                          Dar a
+                        </button>
+                        {selectNewOwner === idKey && (
+                          <div className="form-group">
+                            <select
+                              id="ownerId"
+                              value={selectedNewOwnerId ?? ''}
+                              onChange={(e) =>
+                                setSelectedNewOwnerId(Number(e.target.value))
+                              }
+                              required
+                            >
+                              {characterOptions.map((character) => (
+                                <option key={character.id} value={character.id}>
+                                  {character.nombre}
+                                </option>
+                              ))}
+                            </select>
+                            <button
+                              onClick={() => {
+                                if (selectedNewOwnerId !== null) {
+                                  changeItemOwner(idKey, selectedNewOwnerId);
+                                  setSelectNewOwner(null);
+                                }
+                              }}
+                            >
+                              Confirmar
+                            </button>
+                            <button onClick={() => setSelectNewOwner(null)}>
+                              Cancelar
+                            </button>
+                          </div>
+                        )}
+                        </div>
+                        {selectedCharacterId == jugadorId ||
+                        selectedCharacterId.toString() ==
+                          window.localStorage.getItem('dungeon_master') ? (
+                          <div>
                             <button
                               className="equip-button"
                               onClick={async () => {
-                                if (
-                                  characterItem.id &&
-                                  onToggleEquipped
-                                ) {
+                                if (characterItem.id && onToggleEquipped) {
                                   onToggleEquipped(
                                     characterItem.id,
                                     characterItem.is_equipped ?? false,
@@ -195,35 +228,40 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                                 }
                               }}
                             >
-                              {characterItem.is_equipped ? 'Desequipar' : 'Equipar'}
+                              {characterItem.is_equipped
+                                ? 'Desequipar'
+                                : 'Equipar'}
                             </button>
                             <button
                               className="simple-button"
-                              onClick={() => setSelectNewOwner(idKey)}
+                              onClick={() => setItemToRemove(idKey)}
                             >
-                              Dar a
+                              Eliminar
                             </button>
-                            {selectNewOwner === idKey && (
+                            {itemToRemove === idKey && (
                               <div className="form-group">
-                                <select
-                                  id="ownerId"
-                                  value={selectedNewOwnerId ?? ''}
-                                  onChange={(e) => setSelectedNewOwnerId(Number(e.target.value))}
-                                  required
-                                >
-                                  {characterOptions.map((character) => (
-                                    <option key={character.id} value={character.id}>
-                                      {character.nombre}
-                                    </option>
-                                  ))}
-                                </select>
-                                <button onClick={() => {
-                                  if (selectedNewOwnerId !== null) {
-                                    changeItemOwner(idKey, selectedNewOwnerId);
-                                    setSelectNewOwner(null);
+                                <input
+                                  type="number"
+                                  value={removeQuantity}
+                                  onChange={(e) =>
+                                    setRemoveQuantity(Number(e.target.value))
                                   }
-                                }}>Confirmar</button>
-                                <button onClick={() => setSelectNewOwner(null)}>Cancelar</button>
+                                  min="1"
+                                  max={characterItem.count}
+                                />
+                                <button
+                                  onClick={() => {
+                                    const newCount =
+                                      characterItem.count - removeQuantity;
+                                    setNewItemCount(idKey, newCount);
+                                    setItemToRemove(null);
+                                  }}
+                                >
+                                  Confirmar
+                                </button>
+                                <button onClick={() => setItemToRemove(null)}>
+                                  Cancelar
+                                </button>
                               </div>
                             )}
                             <button
@@ -237,7 +275,9 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                                 }
                               }}
                             >
-                              <i className="nf">{characterItem.public ? '' : ''}</i>
+                              <i className="nf">
+                                {characterItem.public ? '' : ''}
+                              </i>
                             </button>
                           </div>
                         ) : null}

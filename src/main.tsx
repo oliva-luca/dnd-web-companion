@@ -112,6 +112,9 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
     <div className="app-container">
       <main className="app-main">
         <div className="character-select-container">
+          {selectedJugadorId.toString() ==
+            window.localStorage.getItem('dungeon_master') && (
+              <div className="character-select-container">
           <button
             className="big-button"
             onClick={() => {
@@ -134,6 +137,8 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
           >
             Agregar Item
           </button>
+              </div>
+        )}
         </div>
         {isCreateItemPopupOpen && (
           <Popup
