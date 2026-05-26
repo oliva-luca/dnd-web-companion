@@ -15,6 +15,7 @@ export const CreateCharacterItemForm: React.FC<CreateCharacterItemProps> = ({
   const { items } = useItems();
   const [itemId, setItemId] = useState(0);
   const [itemCount, setItemCount] = useState(1);
+  const [itemSearch, setItemSearch] = useState('');
   const [ownerId, setOwnerId] = useState(
     characters.find((c) => c.nombre == 'Mundo')?.id ?? 1,
   );
@@ -34,17 +35,27 @@ export const CreateCharacterItemForm: React.FC<CreateCharacterItemProps> = ({
     (c) => c.nombre !== 'Party'
   );
 
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(itemSearch.toLowerCase()),
+  );
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="itemId">Item</label>
+        <input
+          type="text"
+          placeholder="Buscar item..."
+          value={itemSearch}
+          onChange={(e) => setItemSearch(e.target.value)}
+        />
         <select
           id="itemId"
           value={itemId}
           onChange={(e) => setItemId(Number(e.target.value))}
           required
         >
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
