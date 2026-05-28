@@ -6,6 +6,7 @@ import { useCharacters } from './hooks/useCharacters';
 import { useSelectedCharacter } from './hooks/useSelectedCharacter.ts';
 import Popup from './components/Popup';
 import CreateCharacterForm from './components/CreateCharacterForm';
+import PlayerStatus from './components/PlayerStatus';
 
 interface CharacterSelectScreenProps {
   onSelect: (id: number) => void;
@@ -64,6 +65,7 @@ interface AppProps {
 const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) => {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const { characters, loading, error, reload, toggleItemEquipped, toggleItemPublic, updateItemNotes } = useCharacters(1);
+  const [activeTab, setActiveTab] = useState<'inventory' | 'status'>('inventory');
 
   const [inventarioSeleccionado, setInventarioSeleccionado] = useState<number>(selectedJugadorId);
   const jugadorSeleccionado = characters.find((j) => j.id === inventarioSeleccionado) || null;
@@ -76,20 +78,42 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
             <h2>Cargando...</h2>
           </div>
         ) : (
-          <ItemsList
-            items={jugadorSeleccionado ? jugadorSeleccionado.inventario : []}
-            jugador={
-              jugadorSeleccionado
-                ? jugadorSeleccionado.nombre
-                : 'Seleccionar jugador'
-            }
-            jugadorId={jugadorSeleccionado?.id || -1}
-            onToggleEquipped={toggleItemEquipped}
-            onTogglePublic={toggleItemPublic}
-            onUpdateItemNotes={updateItemNotes}
-            openMenuId={openMenuId}
-            setOpenMenuId={setOpenMenuId}
-          />
+          <div className="main-content-area">
+            <div className="tabs">
+              <button
+                className={`tab-button ${activeTab === 'inventory' ? 'active' : ''}`}
+                onClick={() => setActiveTab('inventory')}
+              >
+                Inventario
+              </button>
+              <button
+                className={`tab-button ${activeTab === 'status' ? 'active' : ''}`}
+                onClick={() => setActiveTab('status')}
+              >
+                Estatus
+              </button>
+            </div>
+            {activeTab === 'inventory' ? (
+              <ItemsList
+                items={jugadorSeleccionado ? jugadorSeleccionado.inventario : []}
+                jugador={
+                  jugadorSeleccionado
+                    ? jugadorSeleccionado.nombre
+                    : 'Seleccionar jugador'
+                }
+                jugadorId={jugadorSeleccionado?.id || -1}
+                onToggleEquipped={toggleItemEquipped}
+                onTogglePublic={toggleItemPublic}
+                onUpdateItemNotes={updateItemNotes}
+                openMenuId={openMenuId}
+                setOpenMenuId={setOpenMenuId}
+              />
+            ) : (
+              jugadorSeleccionado && (
+                <PlayerStatus characterId={jugadorSeleccionado.id} />
+              )
+            )}
+          </div>
         )}
 
         {loading && characters.length > 0 && (

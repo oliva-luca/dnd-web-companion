@@ -1,0 +1,278 @@
+.player-status-container {
+  padding: 24px;
+  background-color: rgba(255, 247, 217, 1);
+  border-radius: 12px;
+  color: #000000;
+  flex: 3;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.player-status-container h3 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 24px;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.health-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background-color: rgba(25, 25, 28, 0.1);
+  border-radius: 8px;
+}
+
+.health-widget h4 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.health-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: background 0.5s ease;
+}
+
+.health-circle-inner {
+  width: 120px;
+  height: 120px;
+  background-color: rgba(255, 247, 217, 1);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hp-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.hp-percent {
+  font-size: 14px;
+  color: #555;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.status-header h3 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.rest-button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: #5a3e85;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.rest-button:hover {
+  background-color: #6d4da0;
+}
+
+.hp-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.hp-controls button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba(25, 25, 28, 0.12);
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+}
+
+.hp-controls button:hover {
+  background-color: rgba(25, 25, 28, 0.2);
+}
+
+.hp-input {
+  width: 64px;
+  text-align: center;
+  padding: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.link-button {
+  margin-top: 12px;
+  border: none;
+  background: none;
+  color: #5a3e85;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.max-hp-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.max-hp-edit input {
+  width: 80px;
+  text-align: center;
+  padding: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.spell-widget {
+  padding: 16px;
+  background-color: rgba(25, 25, 28, 0.1);
+  border-radius: 8px;
+}
+
+.spell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.spell-header h4 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.spell-header .link-button {
+  margin-top: 0;
+}
+
+.empty-hint {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+.slot-config {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slot-config-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.slot-config-row input {
+  width: 64px;
+  text-align: center;
+  padding: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slot-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.slot-level {
+  font-weight: bold;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.slot-pips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pip {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.pip.available {
+  background-color: #5a3e85;
+}
+
+.pip.used {
+  background-color: transparent;
+}
+
+.slot-count {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.slot-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.slot-controls button {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: rgba(25, 25, 28, 0.12);
+  cursor: pointer;
+  font-size: 14px;
+  color: #000;
+}
+
+.slot-controls button:hover:not(:disabled) {
+  background-color: rgba(25, 25, 28, 0.2);
+}
+
+.slot-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

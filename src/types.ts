@@ -32,4 +32,6 @@ export interface Jugador {
   id: number;
   nombre: string;
   inventario: Item[];
+  current_hp?: number;
+  max_hp?: number;
 }
