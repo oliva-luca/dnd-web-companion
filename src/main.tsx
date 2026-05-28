@@ -6,6 +6,7 @@ import { useCharacters } from './hooks/useCharacters';
 import { useSelectedCharacter } from './hooks/useSelectedCharacter.ts';
 import Popup from './components/Popup';
 import CreateCharacterForm from './components/CreateCharacterForm';
+import PlayerStatus from './components/PlayerStatus';
 import CreateItemForm from './components/CreateItemForm';
 import CreateCharacterItemForm from './components/CreateCharacterItem.tsx';
 
@@ -65,6 +66,8 @@ interface AppProps {
 
 const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) => {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  
+  // Combined hook destructuring from both branches
   const {
     characters,
     loading,
@@ -75,11 +78,15 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
     updateItemNotes,
     createCharacterItem,
   } = useCharacters(1);
+
+  // Kept from player-status branch
+  const [activeTab, setActiveTab] = useState<'inventory' | 'status'>('inventory');
+
+  // Kept from master branch
   const [isAPopupOpen, setIsAPopupOpen] = useState(false);
   const [isCreateItemPopupOpen, setCreateItemPopupOpen] = useState(false);
   const [isCreateCharacterItemPopupOpen, setIsCreateCharacterItemPopupOpen] =
     useState(false);
-
   const [inventarioSeleccionado, setInventarioSeleccionado] =
     useState<number>(selectedJugadorId);
   const jugadorSeleccionado =
@@ -178,20 +185,42 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
             <h2>Cargando...</h2>
           </div>
         ) : (
-          <ItemsList
-            items={jugadorSeleccionado ? jugadorSeleccionado.inventario : []}
-            jugador={
-              jugadorSeleccionado
-                ? jugadorSeleccionado.nombre
-                : 'Seleccionar jugador'
-            }
-            jugadorId={jugadorSeleccionado?.id || -1}
-            onToggleEquipped={toggleItemEquipped}
-            onTogglePublic={toggleItemPublic}
-            onUpdateItemNotes={updateItemNotes}
-            openMenuId={openMenuId}
-            setOpenMenuId={setOpenMenuId}
-          />
+          <div className="main-content-area">
+            <div className="tabs">
+              <button
+                className={`tab-button ${activeTab === 'inventory' ? 'active' : ''}`}
+                onClick={() => setActiveTab('inventory')}
+              >
+                Inventario
+              </button>
+              <button
+                className={`tab-button ${activeTab === 'status' ? 'active' : ''}`}
+                onClick={() => setActiveTab('status')}
+              >
+                Estatus
+              </button>
+            </div>
+            {activeTab === 'inventory' ? (
+              <ItemsList
+                items={jugadorSeleccionado ? jugadorSeleccionado.inventario : []}
+                jugador={
+                  jugadorSeleccionado
+                    ? jugadorSeleccionado.nombre
+                    : 'Seleccionar jugador'
+                }
+                jugadorId={jugadorSeleccionado?.id || -1}
+                onToggleEquipped={toggleItemEquipped}
+                onTogglePublic={toggleItemPublic}
+                onUpdateItemNotes={updateItemNotes}
+                openMenuId={openMenuId}
+                setOpenMenuId={setOpenMenuId}
+              />
+            ) : (
+              jugadorSeleccionado && (
+                <PlayerStatus characterId={jugadorSeleccionado.id} />
+              )
+            )}
+          </div>
         )}
 
         {loading && characters.length > 0 && (
