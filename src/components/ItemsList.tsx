@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { CharacterItem } from '../types';
+import { CharacterItem, Jugador } from '../types';
 import './shared.css';
 import './ItemsList.css';
 import './ItemMenu.css';
 import Linkify from 'react-linkify';
 import { useSelectedCharacter } from '../hooks/useSelectedCharacter.ts';
-import { useCharacters } from '../hooks/useCharacters.ts';
 
 const agruparPorCategoriaYOrdenar = (items: CharacterItem[], jugadorId: number, selectedCharacterId: number | null): Record<string, CharacterItem[]> => {
   const itemsOrdenados = [...items].sort((a, b) => a.item.name.localeCompare(b.item.name));
@@ -48,9 +47,12 @@ type ItemsListProps = {
   onUpdateItemNotes?: (characterItemId: number, notes: string) => void;
   openMenuId: number | null;
   setOpenMenuId: (id: number | null) => void;
+  changeItemOwner: (characterItemId: number, newOwnerId: number) => Promise<void>;
+  setNewItemCount: (characterItemId: number, count: number) => Promise<void>;
+  characters: Jugador[];
 };
 
-export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId, onToggleEquipped, onTogglePublic, onUpdateItemNotes, openMenuId, setOpenMenuId }) => {
+export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId, onToggleEquipped, onTogglePublic, onUpdateItemNotes, openMenuId, setOpenMenuId, changeItemOwner, setNewItemCount, characters }) => {
   const [openTextDisplay, setOpenTextDisplay] = useState<{
     [key: number]: 'description' | 'notes' | null;
   }>({});
@@ -61,7 +63,6 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
   const [selectedNewOwnerId, setSelectedNewOwnerId] = useState<number | null>(null);
   const [itemToRemove, setItemToRemove] = useState<number | null>(null);
   const [removeQuantity, setRemoveQuantity] = useState(1);
-  const { characters, changeItemOwner, setNewItemCount } = useCharacters();
   const characterOptions = characters.filter((c) => c.nombre !== 'Party');
 
 
@@ -198,9 +199,9 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                               ))}
                             </select>
                             <button
-                              onClick={() => {
+                              onClick={async () => {
                                 if (selectedNewOwnerId !== null) {
-                                  changeItemOwner(idKey, selectedNewOwnerId);
+                                  await changeItemOwner(idKey, selectedNewOwnerId);
                                   setSelectNewOwner(null);
                                 }
                               }}
@@ -250,10 +251,10 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                                   max={characterItem.count}
                                 />
                                 <button
-                                  onClick={() => {
+                                  onClick={async () => {
                                     const newCount =
                                       characterItem.count - removeQuantity;
-                                    setNewItemCount(idKey, newCount);
+                                    await setNewItemCount(idKey, newCount);
                                     setItemToRemove(null);
                                   }}
                                 >
