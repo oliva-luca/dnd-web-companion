@@ -77,6 +77,8 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
     toggleItemPublic,
     updateItemNotes,
     createCharacterItem,
+    changeItemOwner,
+    setNewItemCount,
   } = useCharacters(1);
 
   // Kept from player-status branch
@@ -214,6 +216,9 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
                 onUpdateItemNotes={updateItemNotes}
                 openMenuId={openMenuId}
                 setOpenMenuId={setOpenMenuId}
+                changeItemOwner={changeItemOwner}
+                setNewItemCount={setNewItemCount}
+                characters={characters}
               />
             ) : (
               jugadorSeleccionado && (

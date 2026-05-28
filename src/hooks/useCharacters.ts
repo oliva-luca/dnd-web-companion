@@ -184,18 +184,34 @@ export function useCharacters(campaignId = 1) {
 
       if (error) {
         console.error('Error updating item owner:', error);
+        setError(error);
+        throw error;
       }
+      await fetchData();
   };
 
   const setNewItemCount = async (characterItemId: number, count: number) => {
-    const { error } = await supabase
-      .from('character_items')
-      .update({ count: count })
-      .eq('id', characterItemId);
+    let result;
+    if (count <= 0) {
+        result = await supabase
+            .from('character_items')
+            .delete()
+            .eq('id', characterItemId);
+    } else {
+        result = await supabase
+          .from('character_items')
+          .update({ count: count })
+          .eq('id', characterItemId);
+    }
+
+    const { error } = result;
 
     if (error) {
-      console.error('Error updating item owner:', error);
+      console.error('Error updating or deleting item count:', error);
+      setError(error);
+      throw error;
     }
+    await fetchData();
   };
   return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter, createCharacterItem, changeItemOwner, setNewItemCount }
 }
