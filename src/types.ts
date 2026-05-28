@@ -16,22 +16,29 @@ export enum CharacterClasses {
 
 export interface Item {
   id: number;
-  nombre: string;
-  cantidad: number;
-  peso: number;
-  valor: number;
-  categoria: string;
-  descripcion?: string;
-  notas?: string;
-  is_equipped?: boolean;
-  public?: boolean;
-  character_item_id?: number;
+  name: string;
+  weight: number;
+  value: number;
+  category: string;
+  description?: string;
 }
+
+export interface CharacterItem {
+  id: number;
+  character_id: number;
+  item_id: number;
+  count: number;
+  is_equipped: boolean;
+  notes?: string;
+  public: boolean;
+  item: Item;
+}
+
 
 export interface Jugador {
   id: number;
   nombre: string;
-  inventario: Item[];
+  inventario: CharacterItem[];
   current_hp?: number;
   max_hp?: number;
 }

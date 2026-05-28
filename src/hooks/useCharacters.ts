@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '../supabaseClient'
-import { Jugador, Item } from '../types'
+import { Jugador, CharacterItem } from '../types'
 
 export function useCharacters(campaignId = 1) {
   const [characters, setCharacters] = useState<Jugador[]>([])
@@ -30,18 +30,22 @@ export function useCharacters(campaignId = 1) {
 
     try {
       const mapped: Jugador[] = (data as any[]).map((c) => {
-        const inventario: Item[] = (c.character_items || []).map((ci: any) => ({
-          id: ci.items?.id ?? ci.id,
-          nombre: ci.items?.name ?? 'Unknown',
-          cantidad: ci.count ?? 1,
-          peso: ci.items?.weight ?? 0,
-          valor: ci.items?.value ?? 0,
-          categoria: ci.items?.category ?? 'Misc',
+        const inventario: CharacterItem[] = (c.character_items || []).map((ci: any) => ({
+          id: ci.id,
+          character_id: c.id,
+          item_id: ci.items?.id,
+          count: ci.count ?? 1,
           is_equipped: ci.is_equipped ?? false,
           public: ci.public ?? true,
-          character_item_id: ci.id,
-          descripcion: ci.items?.description,
-          notas: ci.notes
+          notes: ci.notes,
+          item: {
+            id: ci.items?.id,
+            name: ci.items?.name ?? 'Unknown',
+            weight: ci.items?.weight ?? 0,
+            value: ci.items?.value ?? 0,
+            category: ci.items?.category ?? 'Misc',
+            description: ci.items?.description,
+          }
         }))
 
         return {
@@ -95,7 +99,7 @@ export function useCharacters(campaignId = 1) {
   }, [fetchData])
 
   const createOptimisticUpdater = <T>(
-    updateFn: (item: Item, _value: T) => Item,
+    updateFn: (item: CharacterItem, _value: T) => CharacterItem,
     // loosened return type to allow supabase's builder-like return type without TS errors
     dbUpdate: (characterItemId: number, value: T) => any,
   ) => {
@@ -107,7 +111,7 @@ export function useCharacters(campaignId = 1) {
         prev.map((c) => ({
           ...c,
           inventario: c.inventario.map((item) =>
-            item.character_item_id === characterItemId
+            item.id === characterItemId
               ? updateFn(item, value)
               : item,
           ),
@@ -143,7 +147,7 @@ export function useCharacters(campaignId = 1) {
   );
 
   const updateItemNotes = createOptimisticUpdater(
-    (item, value) => ({ ...item, notas: value as string }),
+    (item, value) => ({ ...item, notes: value as string }),
     (id, value) =>
       supabase.from('character_items').update({ notes: value }).eq('id', id),
   );
@@ -160,6 +164,38 @@ export function useCharacters(campaignId = 1) {
       fetchData();
     }
   };
+  
+  const createCharacterItem = async (characterItem: Omit<CharacterItem, 'id'| 'item'>) => {
+      const { data, error } = await supabase
+        .from('character_items')
+        .insert(characterItem)
+        .select();
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data[0];
+    };
 
-  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter }
+  const changeItemOwner = async (characterItemId: number, newOwnerId: number) => {
+      const { error } = await supabase
+        .from('character_items')
+        .update({ character_id: newOwnerId })
+        .eq('id', characterItemId);
+
+      if (error) {
+        console.error('Error updating item owner:', error);
+      }
+  };
+
+  const setNewItemCount = async (characterItemId: number, count: number) => {
+    const { error } = await supabase
+      .from('character_items')
+      .update({ count: count })
+      .eq('id', characterItemId);
+
+    if (error) {
+      console.error('Error updating item owner:', error);
+    }
+  };
+  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter, createCharacterItem, changeItemOwner, setNewItemCount }
 }
