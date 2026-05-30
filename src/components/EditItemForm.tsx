@@ -3,14 +3,15 @@ import { useItems } from '../hooks/useItem';
 import { Item } from '../types';
 
 interface EditItemFormProps {
+  item: Item;
   onClose: () => void;
   onSave: (updatedItem: Item) => void;
 }
 
-const EditItemForm: React.FC<EditItemFormProps> = ({ onClose, onSave }) => {
+const EditItemForm: React.FC<EditItemFormProps> = ({ item, onClose, onSave }) => {
   const { items, updateItem, error } = useItems();
-  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
-  const [formData, setFormData] = useState<Partial<Item>>({});
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(item.id);
+  const [formData, setFormData] = useState<Partial<Item>>(item);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { CharacterItem, Jugador } from '../types';
+import { CharacterItem, Jugador, Item } from '../types';
 import './shared.css';
 import './ItemsList.css';
 import './ItemMenu.css';
@@ -50,9 +50,10 @@ type ItemsListProps = {
   changeItemOwner: (characterItemId: number, newOwnerId: number) => Promise<void>;
   setNewItemCount: (characterItemId: number, count: number) => Promise<void>;
   characters: Jugador[];
+  onEditItem: (item: Item) => void;
 };
 
-export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId, onToggleEquipped, onTogglePublic, onUpdateItemNotes, openMenuId, setOpenMenuId, changeItemOwner, setNewItemCount, characters }) => {
+export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId, onToggleEquipped, onTogglePublic, onUpdateItemNotes, openMenuId, setOpenMenuId, changeItemOwner, setNewItemCount, characters, onEditItem }) => {
   const [openTextDisplay, setOpenTextDisplay] = useState<{
     [key: number]: 'description' | 'notes' | null;
   }>({});
@@ -214,6 +215,14 @@ export const ItemsList: React.FC<ItemsListProps> = ({ items, jugador, jugadorId,
                           </div>
                         )}
                         </div>
+                        {selectedCharacterId.toString() === window.localStorage.getItem('dungeon_master') && (
+                            <button
+                                className="simple-button"
+                                onClick={() => onEditItem(item)}
+                            >
+                                Editar
+                            </button>
+                        )}
                         {selectedCharacterId == jugadorId ||
                         selectedCharacterId.toString() ==
                           window.localStorage.getItem('dungeon_master') ? (

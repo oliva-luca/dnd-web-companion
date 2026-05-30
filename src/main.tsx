@@ -144,7 +144,7 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
               </button>
               <button className="big-button" onClick={() => {
                 if (!isAPopupOpen && jugadorSeleccionado?.inventario.length) {
-                  handleEditItem(jugadorSeleccionado.inventario[0]);
+                  handleEditItem(jugadorSeleccionado.inventario[0].item);
                 }
               }}>
                 Editar Item
