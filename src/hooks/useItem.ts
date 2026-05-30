@@ -37,5 +37,17 @@ export function useItems() {
     return data[0];
   };
 
-  return { items, loading, error, reload: fetchData, createItem }
+  const updateItem = async (id: number, updates: Partial<Omit<Item, 'id'>>) => {
+    const { data, error } = await supabase
+      .from('items')
+      .update(updates)
+      .eq('id', id)
+      .select();
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data ? data[0] : null;
+  };
+
+  return { items, loading, error, reload: fetchData, createItem, updateItem }
 }
