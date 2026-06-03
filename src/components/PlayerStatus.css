@@ -276,3 +276,38 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+@media (max-width: 640px) {
+  .player-status-container {
+    padding: 16px;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .status-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .status-header h3,
+  .player-status-container h3 {
+    font-size: 20px;
+  }
+
+  .rest-button {
+    padding: 10px 16px;
+  }
+
+  .slot-row {
+    grid-template-columns: auto 1fr auto;
+    row-gap: 8px;
+  }
+
+  .slot-controls {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}

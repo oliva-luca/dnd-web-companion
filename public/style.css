@@ -350,9 +350,55 @@ form {
 }
 
 @media (max-width: 1024px) {
+    body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+
     .app-main {
         flex-direction: column;
-        gap: 24px;
-        padding: 24px 16px;
+        align-items: stretch;
+        gap: 20px;
+        padding: 24px 16px 92px;
+    }
+
+    .character-select-container,
+    .main-content-area {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Back / reload become floating buttons so they never cover stacked content */
+    .controls {
+        position: fixed;
+        top: auto;
+        left: auto;
+        right: 16px;
+        bottom: 16px;
+        z-index: 1100;
+        gap: 8px;
+    }
+
+    .controls button {
+        width: 48px;
+        height: 48px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .controls .error {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .app-main {
+        gap: 16px;
+        padding: 16px 12px 88px;
+    }
+
+    .form-actions button {
+        flex: 1;
     }
 }

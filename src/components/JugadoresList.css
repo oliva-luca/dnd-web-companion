@@ -62,3 +62,32 @@
     background-color: rgba(76, 166, 255, 0.25);
     border-color: rgba(76, 166, 255, 0.6);
 }
+
+@media (max-width: 1024px) {
+    .jugadores-list {
+        max-width: 100%;
+        max-height: 45vh;
+    }
+}
+
+@media (max-width: 640px) {
+    .jugadores-list {
+        max-height: none;
+    }
+
+    .jugadores-list > ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .jugador {
+        flex: 1 1 calc(50% - 8px);
+        padding: 14px 12px;
+        text-align: center;
+    }
+
+    .jugador:hover {
+        transform: none;
+    }
+}

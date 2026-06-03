@@ -183,3 +183,44 @@
     justify-content: flex-end;
     margin-top: 8px;
 }
+
+@media (max-width: 1024px) {
+    .items-list {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .item-main {
+        padding-right: 28px;
+        column-gap: 10px;
+        row-gap: 4px;
+        flex-wrap: wrap;
+    }
+
+    .item-name {
+        flex: 1 1 100%;
+        font-size: 15px;
+    }
+
+    .cantidad,
+    .peso,
+    .valor {
+        flex: 0 0 auto;
+    }
+
+    .categoria-titulo {
+        font-size: 15px;
+    }
+
+    /* Inline action rows inside an item menu stack cleanly on phones */
+    .item-menu .form-group {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .item-menu .form-group select,
+    .item-menu .form-group input {
+        width: 100%;
+    }
+}
