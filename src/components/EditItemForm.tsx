@@ -54,11 +54,12 @@ const EditItemForm: React.FC<EditItemFormProps> = ({ item, onClose, onSave }) =>
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Search Item:</label>
+      <div className="form-group">
+        <label htmlFor="edit-item-search">Buscar item</label>
         <input
+          id="edit-item-search"
           type="text"
-          placeholder="Search..."
+          placeholder="Escribí para filtrar…"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <select
@@ -66,7 +67,7 @@ const EditItemForm: React.FC<EditItemFormProps> = ({ item, onClose, onSave }) =>
           onChange={handleItemChange}
           required
         >
-          <option value="">Select an item</option>
+          <option value="">Seleccioná un item</option>
           {filteredItems.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
@@ -76,55 +77,69 @@ const EditItemForm: React.FC<EditItemFormProps> = ({ item, onClose, onSave }) =>
       </div>
       {selectedItemId && (
         <>
-          <div>
-            <label>Name:</label>
+          <div className="form-group">
+            <label htmlFor="edit-item-name">Nombre</label>
             <input
+              id="edit-item-name"
               type="text"
               name="name"
               value={formData.name || ''}
               onChange={handleChange}
             />
           </div>
-          <div>
-            <label>Weight:</label>
+          <div className="form-group">
+            <label htmlFor="edit-item-weight">Peso (kg)</label>
             <input
+              id="edit-item-weight"
               type="number"
               name="weight"
               value={formData.weight || 0}
               onChange={handleChange}
             />
           </div>
-          <div>
-            <label>Value:</label>
+          <div className="form-group">
+            <label htmlFor="edit-item-value">Valor ($)</label>
             <input
+              id="edit-item-value"
               type="number"
               name="value"
               value={formData.value || 0}
               onChange={handleChange}
             />
           </div>
-          <div>
-            <label>Category:</label>
+          <div className="form-group">
+            <label htmlFor="edit-item-category">Categoría</label>
             <input
+              id="edit-item-category"
               type="text"
               name="category"
               value={formData.category || ''}
               onChange={handleChange}
             />
           </div>
-          <div>
-            <label>Description:</label>
+          <div className="form-group">
+            <label htmlFor="edit-item-description">Descripción</label>
             <textarea
+              id="edit-item-description"
               name="description"
+              rows={4}
               value={formData.description || ''}
               onChange={handleChange}
             />
           </div>
-          {error && <p>Error: {error.message}</p>}
-          <button type="submit">Save</button>
+          {error && <p className="error">Error: {error.message}</p>}
         </>
       )}
-      <button type="button" onClick={onClose}>Cancel</button>
+      <div className="form-actions">
+        <button type="button" onClick={onClose} className="secondary-button">
+          Cancelar
+        </button>
+        {selectedItemId && (
+          <button type="submit" className="primary-button">
+            Guardar
+          </button>
+        )}
+      </div>
     </form>
   );
 };

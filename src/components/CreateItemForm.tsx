@@ -28,48 +28,62 @@ const CreateItemForm: React.FC<CreateItemFormProps> = ({ onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <h2 className="text-lg font-bold">Crear Nuevo Item</h2>
-      <input
-        type="text"
-        placeholder="Nombre"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="p-2 border rounded"
-      />
-      <input
-        type="number"
-        placeholder="Peso"
-        value={weight}
-        onChange={(e) => setWeight(parseFloat(e.target.value))}
-        className="p-2 border rounded"
-      />
-      <input
-        type="number"
-        placeholder="Valor"
-        value={value}
-        onChange={(e) => setValue(parseFloat(e.target.value))}
-        className="p-2 border rounded"
-      />
-      <input
-        type="text"
-        placeholder="Categoría"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        className="p-2 border rounded"
-      />
-      <textarea
-        placeholder="Descripción"
-        style={{width: '72%'}}
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="p-2 border rounded"
-      />
-      <div className="flex justify-end gap-2">
-        <button type="button" onClick={onClose} className="p-2">
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label htmlFor="item-name">Nombre</label>
+        <input
+          id="item-name"
+          type="text"
+          placeholder="Espada larga"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="item-weight">Peso (kg)</label>
+        <input
+          id="item-weight"
+          type="number"
+          placeholder="0"
+          value={weight}
+          onChange={(e) => setWeight(parseFloat(e.target.value))}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="item-value">Valor ($)</label>
+        <input
+          id="item-value"
+          type="number"
+          placeholder="0"
+          value={value}
+          onChange={(e) => setValue(parseFloat(e.target.value))}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="item-category">Categoría</label>
+        <input
+          id="item-category"
+          type="text"
+          placeholder="Armas, Consumibles…"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="item-description">Descripción</label>
+        <textarea
+          id="item-description"
+          placeholder="Detalles del item…"
+          rows={4}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      <div className="form-actions">
+        <button type="button" onClick={onClose} className="secondary-button">
           Cancelar
         </button>
-        <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+        <button type="submit" className="primary-button">
           Crear
         </button>
       </div>

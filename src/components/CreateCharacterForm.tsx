@@ -56,8 +56,8 @@ export const CreateCharacterForm: React.FC<CreateCharacterFormProps> = ({ onSubm
         />
       </div>
       <div className="form-actions">
-        <button type="submit" className="simple-button">Crear</button>
-        <button type="button" className="simple-button" onClick={onCancel}>Cancelar</button>
+        <button type="button" className="secondary-button" onClick={onCancel}>Cancelar</button>
+        <button type="submit" className="primary-button">Crear</button>
       </div>
     </form>
   );

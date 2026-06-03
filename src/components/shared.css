@@ -1,18 +1,20 @@
 .list-container {
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    border: 1px solid rgba(181, 138, 20, 0.18);
+    border-radius: var(--radius, 12px);
     padding: 24px;
     height: 80vh;
-    background-color: rgba(255, 247, 217, 1);
+    background-color: var(--parchment, #fff7d9);
+    box-shadow: var(--shadow-card, 0 18px 40px rgba(0, 0, 0, 0.35));
 }
 
 .list-container h2 {
     margin-top: 0;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     font-size: 20px;
-    font-weight: 400;
+    font-weight: 600;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #000000;
+    color: var(--ink, #26211a);
 }
 
 .list-container ul {
@@ -25,30 +27,43 @@
 }
 
 hr.solid {
-    border-top: 1px solid #000000;
+    border: none;
+    border-top: 1px solid rgba(38, 33, 26, 0.15);
     width: 100%;
+    margin: 0 0 16px;
 }
 
 .loading-indicator {
     position: fixed;
     left: 16px;
     bottom: 16px;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.78);
     color: #ffffff;
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
     font-size: 13px;
     z-index: 9999;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 .big-button {
     max-height: 70px;
-    background: rgba(76,166,255,1);
-    border: 1px solid rgba(76,166,255,0.5);
-    color: rgba(0,0,0,0.95);
-    padding: 6px 10px;
-    border-radius: 6px;
+    background: linear-gradient(180deg, var(--accent, #3b8ee6) 0%, var(--accent-strong, #2f74bd) 100%);
+    border: 1px solid var(--accent-strong, #2f74bd);
+    color: #ffffff;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm, 8px);
     cursor: pointer;
-    font-size: 22px;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 6px 16px var(--accent-glow, rgba(76, 166, 255, 0.28));
+    transition: filter 0.15s ease, transform 0.05s ease;
+}
+
+.big-button:hover {
+    filter: brightness(1.07);
+}
+
+.big-button:active {
+    transform: translateY(1px);
 }

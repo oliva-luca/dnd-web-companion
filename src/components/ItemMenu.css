@@ -1,41 +1,61 @@
 .item-menu {
     width: 100%;
-    margin-top: 8px;
-    /*background: rgba(255,255,255,0.7);*/
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(38, 33, 26, 0.18);
     border-radius: 6px;
-    /*border: 1px solid rgba(0,0,0,0.06);*/
     display: flex;
-    justify-content: space-between; /* 👈 Esto hace la magia */
-    align-items: center; /* Centra los botones verticalmente */
-    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
     gap: 8px;
+}
+
+.item-menu > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.equip-button,
+.simple-button {
+    background: rgba(59, 142, 230, 0.12);
+    border: 1px solid rgba(59, 142, 230, 0.45);
+    color: var(--accent-strong, #2f74bd);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm, 8px);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.equip-button:hover,
+.simple-button:hover {
+    background: rgba(59, 142, 230, 0.2);
+    border-color: rgba(59, 142, 230, 0.7);
 }
 
 .equip-button {
-    background: rgba(76,166,255,0.12);
-    border: 1px solid rgba(76,166,255,0.5);
-    color: rgba(0,0,0,0.95);
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.simple-button {
-    background: rgba(76,166,255,0.12);
-    border: 1px solid rgba(76,166,255,0.5);
-    color: rgba(0,0,0,0.95);
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
+    background: rgba(59, 142, 230, 0.18);
 }
 
 .text-display {
-    width: 97%;
-    margin-top: 8px;
-    background: rgba(255,255,255,0);
-    border-radius: 6px;
-    border: 1px solid rgba(0,0,0,0);
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: var(--radius-sm, 8px);
+    border: 1px solid rgba(38, 33, 26, 0.1);
     display: flex;
     flex-direction: column;
     gap: 8px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.text-display a {
+    color: var(--accent-strong, #2f74bd);
 }
