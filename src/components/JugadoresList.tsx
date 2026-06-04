@@ -17,7 +17,8 @@ const classIconos: Record<number, string> = {
   10: '󰳉', // 'Paladín',
   11: '󰴮',// 'Pícaro',
   12: '󰁨', // 'Hechicero',
-  13: ''
+  13: '',
+  14: '󰴮',
 };
 
 type Props = {
@@ -47,7 +48,7 @@ export const JugadoresList: React.FC<Props> = ({
         >
           <div className="class-icon">
             <i className="nf" style={{ fontSize: 18, color: '#b58a14' }}>
-              {classIconos[jugador.nombre == 'Mundo' ? 13 : jugador.class] ||
+              {classIconos[jugador.nombre == 'Mundo' ? 13 : jugador.class ?? 14] ||
                 '󰴮'}
             </i>
           </div>
