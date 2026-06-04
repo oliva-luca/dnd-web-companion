@@ -38,14 +38,25 @@ const CharacterSelectScreen: React.FC<CharacterSelectScreenProps> = ({ onSelect 
           </div>
         ) : (
           <div className="character-select-container">
-            <JugadoresList
-              jugadores={filteredCharacters}
-              selectedId={-1}
-              onSelect={onSelect}
-            />
-            <button className="big-button" onClick={() => setIsPopupOpen(true)}>
-              Crear Personaje
-            </button>
+            <div
+              style={{
+                maxHeight: '80vh',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '24px',
+              }}
+            >
+              <JugadoresList
+                jugadores={filteredCharacters}
+                selectedId={-1}
+                onSelect={onSelect}
+              />
+              <button className="big-button" onClick={() => setIsPopupOpen(true)}>
+                Crear Personaje
+              </button>
+            </div>
           </div>
         )}
         {isPopupOpen && (

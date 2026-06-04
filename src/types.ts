@@ -41,4 +41,7 @@ export interface Jugador {
   inventario: CharacterItem[];
   current_hp?: number;
   max_hp?: number;
+  class?: number;
+  level?: number;
+  public?: boolean;
 }

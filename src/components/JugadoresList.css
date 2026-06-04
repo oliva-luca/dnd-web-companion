@@ -1,12 +1,12 @@
 .jugadores-list {
     flex: 1;
-    max-width: 200px;
+    max-width: 250px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     background-color: rgba(255, 247, 217, 1);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden; /* Restaurado para contener el desbordamiento */
 }
 
 .jugadores-list > h2 {
@@ -41,6 +41,9 @@
 }
 
 .jugador {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     padding: 16px;
     background-color: rgba(25, 25, 28, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -61,6 +64,17 @@
 .jugador.selected {
     background-color: rgba(76, 166, 255, 0.25);
     border-color: rgba(76, 166, 255, 0.6);
+}
+
+.class-icon {
+    height: 40px;
+    background-color: #b58a1430;
+    border: 1px solid #b58a14;
+    border-radius: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
 }
 
 @media (max-width: 1024px) {
