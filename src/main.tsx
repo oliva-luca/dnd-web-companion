@@ -17,7 +17,7 @@ interface CharacterSelectScreenProps {
 }
 
 const CharacterSelectScreen: React.FC<CharacterSelectScreenProps> = ({ onSelect }) => {
-  const { characters, loading, createCharacter } = useCharacters(1);
+  const { characters, loading, createCharacter, toggleCharacterPublic } = useCharacters(1);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const filteredCharacters = characters
@@ -53,6 +53,7 @@ const CharacterSelectScreen: React.FC<CharacterSelectScreenProps> = ({ onSelect 
                 selectedId={-1}
                 onSelect={onSelect}
                 currentUserId={-1}
+                toggleCharacterPublic={toggleCharacterPublic}
               />
               <button className="big-button" onClick={() => setIsPopupOpen(true)}>
                 Crear Personaje
@@ -91,6 +92,7 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
     createCharacterItem,
     changeItemOwner,
     setNewItemCount,
+    toggleCharacterPublic,
   } = useCharacters(1);
 
   const [activeTab, setActiveTab] = useState<'inventory' | 'status'>('inventory');
@@ -260,6 +262,7 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
           selectedId={inventarioSeleccionado}
           onSelect={setInventarioSeleccionado}
           currentUserId={selectedJugadorId}
+          toggleCharacterPublic={toggleCharacterPublic}
         />
       </main>
     </div>

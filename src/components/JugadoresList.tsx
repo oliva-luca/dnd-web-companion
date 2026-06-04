@@ -2,7 +2,6 @@ import React from 'react';
 import { Jugador } from '../types';
 import './shared.css';
 import './JugadoresList.css';
-import { useCharacters } from '../hooks/useCharacters.ts';
 
 const classIconos: Record<number, string> = {
   0: '', // '󰢊', // 'Artífice',
@@ -27,6 +26,7 @@ type Props = {
   selectedId: number | null;
   onSelect: (id: number) => void;
   currentUserId: number;
+  toggleCharacterPublic: (id: number) => void;
 };
 
 export const JugadoresList: React.FC<Props> = ({
@@ -34,9 +34,8 @@ export const JugadoresList: React.FC<Props> = ({
   selectedId,
   onSelect,
   currentUserId,
+  toggleCharacterPublic,
 }) => {
-  const { toggleCharacterPublic } = useCharacters();
-
   const handleIconClassClick = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     const dungeonMasterId = window.localStorage.getItem('dungeon_master');
