@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '../supabaseClient'
-import { Jugador, CharacterItem } from '../types'
+import { Jugador, CharacterItem } from '../types';
 
 export function useCharacters(campaignId = 1) {
   const [characters, setCharacters] = useState<Jugador[]>([])
@@ -74,6 +74,7 @@ export function useCharacters(campaignId = 1) {
         id: 0,
         nombre: 'Party',
         inventario: publicItems,
+        public: true,
       };
 
       const finalCharacters = [party, ...otherCharacters];
@@ -216,5 +217,23 @@ export function useCharacters(campaignId = 1) {
     }
     await fetchData();
   };
-  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter, createCharacterItem, changeItemOwner, setNewItemCount }
+
+  const toggleCharacterPublic = async (id: number) => {
+    const character = characters.find(c => c.id === id);
+    if (!character) return;
+
+    const { error } = await supabase
+      .from('characters')
+      .update({ public: !character.public })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error toggling character public state:', error);
+      setError(error);
+    } else {
+      await fetchData();
+    }
+  };
+
+  return { characters, loading, error, reload: fetchData, toggleItemEquipped, toggleItemPublic, updateItemNotes, createCharacter, createCharacterItem, changeItemOwner, setNewItemCount, toggleCharacterPublic }
 }

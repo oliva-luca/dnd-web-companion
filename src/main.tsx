@@ -21,7 +21,7 @@ const CharacterSelectScreen: React.FC<CharacterSelectScreenProps> = ({ onSelect 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const filteredCharacters = characters
-    .filter(c => c.nombre !== 'Party')
+    .filter(c => c.nombre !== 'Party' && c.public)
     .map(c => c.nombre === 'Mundo' ? { ...c, nombre: 'Dungeon Master' } : c);
 
   const handleCreateCharacter = async (name: string, characterClass: number, level: number) => {
@@ -52,6 +52,7 @@ const CharacterSelectScreen: React.FC<CharacterSelectScreenProps> = ({ onSelect 
                 jugadores={filteredCharacters}
                 selectedId={-1}
                 onSelect={onSelect}
+                currentUserId={-1}
               />
               <button className="big-button" onClick={() => setIsPopupOpen(true)}>
                 Crear Personaje
@@ -100,6 +101,20 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
   const [isCreateCharacterItemPopupOpen, setIsCreateCharacterItemPopupOpen] = useState(false);
   const [inventarioSeleccionado, setInventarioSeleccionado] = useState<number>(selectedJugadorId);
   const jugadorSeleccionado = characters.find((j) => j.id === inventarioSeleccionado) || null;
+  const filteredCharacters = characters
+    .filter(
+      (c) =>
+        c.public ||
+        selectedJugadorId.toString() ===
+          window.localStorage.getItem('dungeon_master'),
+    )
+    .sort((a, b) => {
+      if (a.nombre === 'Party') return -1;
+      if (b.nombre === 'Party') return 1;
+      if (a.nombre === 'Mundo') return 1;
+      if (b.nombre === 'Mundo') return -1;
+      return a.nombre.localeCompare(b.nombre);
+    });
 
   const handleCreateCharacterItem = async (itemId: number, ownerId: number, itemCount: number) => {
     try {
@@ -241,9 +256,10 @@ const App: React.FC<AppProps> = ({ selectedJugadorId, setSelectedJugadorId }) =>
           {error && <div className="error">Error al cargar datos: {String(error?.message || error)}</div>}
         </div>
         <JugadoresList
-          jugadores={characters}
+          jugadores={filteredCharacters}
           selectedId={inventarioSeleccionado}
           onSelect={setInventarioSeleccionado}
+          currentUserId={selectedJugadorId}
         />
       </main>
     </div>

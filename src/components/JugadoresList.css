@@ -77,6 +77,19 @@
     aspect-ratio: 1 / 1;
 }
 
+.class-icon:hover{
+    transform: scale(1.08);
+}
+
+.class-icon:active {
+    transform: scale(0.95);
+}
+
+.jugador.invisible {
+    background-color: rgba(25, 25, 28, 0.3);
+    color: #888;
+}
+
 @media (max-width: 1024px) {
     .jugadores-list {
         max-width: 100%;
