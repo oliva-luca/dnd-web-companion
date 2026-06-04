@@ -75,13 +75,16 @@
     align-items: center;
     justify-content: center;
     aspect-ratio: 1 / 1;
+    transition: all 0.2s ease-in-out;
 }
 
-.class-icon:hover{
-    transform: scale(1.08);
+.class-icon:hover {
+    background-color: #b58a1450;
+    transform: scale(1.05);
 }
 
 .class-icon:active {
+    background-color: #b58a1480;
     transform: scale(0.95);
 }
 
