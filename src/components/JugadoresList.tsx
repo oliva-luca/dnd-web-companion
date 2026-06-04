@@ -59,12 +59,12 @@ export const JugadoresList: React.FC<Props> = ({
               if (e.key === 'Enter' || e.key === ' ') onSelect(jugador.id);
             }}
           >
-            <div className="class-icon">
+            <button className="class-icon">
               <i className="nf" style={{ fontSize: 18, color: '#b58a14' }} onClick={(e) => handleIconClassClick(e, jugador.id)}>
                 {classIconos[jugador.nombre == 'Mundo' ? 13 : jugador.class ?? 14] ||
                   '󰴮'}
               </i>
-            </div>
+            </button>
             {jugador.nombre}
           </li>
         ))}
